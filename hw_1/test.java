@@ -1,5 +1,5 @@
 package hw_1;
 
-public class test {
+private class test {
   
 }
