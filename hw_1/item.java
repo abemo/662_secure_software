@@ -1,5 +1,5 @@
 package hw_1;
 
-private class item {
+public class item {
   
 }
