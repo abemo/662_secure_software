@@ -1,5 +1,5 @@
 package hw_1;
-import java.util.*;
+import java.util.*; // TODO should only import what is needed 
 import java.util.regex.Pattern;
 
 public final class ShoppingCart {
@@ -15,10 +15,10 @@ public final class ShoppingCart {
     public ShoppingCart(UUID customerID){
         this.CART_ID = UUID.randomUUID();
         this.CUSTOMER_ID = customerID;
-        this.items = new HashMap<String, Integer>();
+        this.items = new HashMap<>();
     }
 
-    public UUID getCartId() {
+    public UUID getCartId() { // TODO should this be named cartId instead?
         return this.CART_ID;
     }
 
