@@ -3,27 +3,24 @@ import java.util.*;
 
 public class main {
     public static void main(String[] args) {
-        Customer customer = new Customer();
-        customer.createNewShoppingCart();
-
-        ShoppingCart cart = customer.getShoppingCarts().get(0);
+        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         cart.addItem("APPLE", 5);
         cart.addItem("apple", 5);
         cart.addItem("banana", 100);
-        // cart.addItem("banana", 1);
-        System.out.println(cart.getItems());
+        System.out.println(cart.items());
         System.out.println("------------------------------------");
-        UUID cartId = cart.getCartId();
-        System.out.println(cartId);
-        cartId = UUID.randomUUID();
-        System.out.println(cartId);
-        System.out.println(cart.getCartId());
+        cart.removeItem("apple", 3);
+        System.out.println(cart.items());
         System.out.println("------------------------------------");
-        UUID customerId = customer.getCustomerId();
-        System.out.println(customerId);
-        customerId = UUID.randomUUID();
-        System.out.println(customerId);
-        System.out.println(customer.getCustomerId());
+        // cart.removeItem("apple", 100);
+        // System.out.println(cart.items());
+        // System.out.println("------------------------------------");
+        UUID cartId = cart.cartId();
+        System.out.println("cartId: " + cartId);
+        String customerId = cart.customerId();
+        System.out.println("customerId: " + customerId);
+        System.out.println("customerId: " + cart.customerId());
+        System.out.println("------------------------------------");
 
     }
 }

@@ -1,10 +1,15 @@
 package hw_1;
-import java.util.*; // TODO should only import what is needed 
+import java.util.UUID;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.Collections;
 import java.util.regex.Pattern;
 
 public final class ShoppingCart {
     private final UUID CART_ID;
-    private final UUID CUSTOMER_ID;
+    private final String CUSTOMER_ID;
+    private static final Pattern CUSTOMER_ID_PATTERN = Pattern.compile("^[a-zA-Z]{3}[\\d]{5}[a-zA-Z]{2}[-][AQ]$");
     private final Map<String, Integer> items;
     private static final int MAX_QUANTITY = 100;
     private static final int MAX_ITEM_NAME_LENGTH = 50;
@@ -12,27 +17,29 @@ public final class ShoppingCart {
     private static final Set<String> CATALOG = Set.of("apple", "banana", "orange", "laptop", "book");
 
 
-    public ShoppingCart(UUID customerID){
+    public ShoppingCart(String customerID){
+        validateCustomerID(customerID);
         this.CART_ID = UUID.randomUUID();
         this.CUSTOMER_ID = customerID;
         this.items = new HashMap<>();
     }
 
-    public UUID getCartId() { // TODO should this be named cartId instead?
+    public UUID cartId() { 
         return this.CART_ID;
     }
 
-    public String getCustomerId() {
-        return this.CUSTOMER_ID.toString();
+    public String customerId() {
+        return this.CUSTOMER_ID;
     }
 
-    public Map<String, Integer> getItems() {
+    public Map<String, Integer> items() {
         return Collections.unmodifiableMap(new HashMap<>(items));
     }
 
     public void addItem(String itemName, int quantity) {
         itemName = itemName.toLowerCase();
-        validateItem(itemName, quantity);
+        validateItemName(itemName);
+        validateQuantity(quantity);
         items.put(itemName, items.getOrDefault(itemName, 0) + quantity);
     }
 
@@ -56,20 +63,36 @@ public final class ShoppingCart {
         return items.get(itemName);
     }
 
-    private void validateItem(String itemName, int quantity) {
+    private void validateCustomerID(String customerID) {
+        if (customerID == null) {
+            throw new IllegalArgumentException("Customer ID cannot be null");
+        }
+        if (customerID.isBlank()) {
+            throw new IllegalArgumentException("Customer ID cannot be empty");
+        }
+        if (!CUSTOMER_ID_PATTERN.matcher(customerID).matches()) {
+            throw new IllegalArgumentException("Invalid customer ID format");
+        }
+    }
+
+    private void validateItemName(String itemName) {
         if (!CATALOG.contains(itemName.toLowerCase())) {
             throw new IllegalArgumentException("Invalid item. Not in catalog.");
         }
         if (!ITEM_NAME_PATTERN.matcher(itemName).matches()) {
             throw new IllegalArgumentException("Invalid item name format");
         }
+        if (itemName.length() > MAX_ITEM_NAME_LENGTH) {
+            throw new IllegalArgumentException("Item name is too long");
+        }
+        if (itemName.isBlank()) {
+            throw new IllegalArgumentException("Item name cannot be empty");
+        }
+    }
+
+    private void validateQuantity(int quantity) {
         if (quantity <= 0 || quantity > MAX_QUANTITY) {
             throw new IllegalArgumentException("Quantity must be between 1 and " + MAX_QUANTITY);
-        }
-        if (items.containsKey(itemName)) {
-            if (quantity + getItemQuantity(itemName) > MAX_QUANTITY || quantity + getItemQuantity(itemName) < 0) {
-                throw new IllegalArgumentException("Quantity exceeds maximum allowed quantity");
-            }
         }
     }
 
