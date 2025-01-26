@@ -12,7 +12,7 @@ Specification
 - [✅] Ensure that no one can change the cart indirectly by modifying the values (ids, items, etc.) you provided them.
 - [✅] Provide a way for users to add, update, and remove items.
 - [✅] Ensure the id and customer id of the cart can never be changed.
-- [❌] Provide a method to get the total cost of the items in the cart.
+- [✅] Provide a method to get the total cost of the items in the cart.
 - [✅] Store shopping cart ids as uuid4s.
 - [✅] Require customer ids to have the following form: 3 letters, 5 numbers, 2 letters, a dash, and finally an A or a Q.
 - [✅] Ensure negative quantities for any item in the cart can never appear.

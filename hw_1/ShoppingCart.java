@@ -13,8 +13,10 @@ public final class ShoppingCart {
     private final Map<String, Integer> items;
     private static final int MAX_QUANTITY = 100;
     private static final int MAX_ITEM_NAME_LENGTH = 50;
+    private static final double MAX_CART_TOTAL = 2500.0;
     private static final Pattern ITEM_NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9 ]{1,50}$");
     private static final Set<String> CATALOG = Set.of("apple", "banana", "orange", "laptop", "book");
+    private static final Map<String, Double> PRICES = Map.of("apple", 0.5, "banana", 0.3, "orange", 0.4, "laptop", 1000.0, "book", 20.0);
 
 
     public ShoppingCart(String customerID){
@@ -54,6 +56,20 @@ public final class ShoppingCart {
             throw new IllegalArgumentException("Quantity exceeds the quantity of the item in the cart");
         }
         items.put(itemName, items.get(itemName) - quantity);
+    }
+
+    public double totalCost() {
+        double total = 0;
+        for (Map.Entry<String, Integer> entry : items.entrySet()) {
+            total += PRICES.get(entry.getKey()) * entry.getValue();
+        }
+        if (total < 0) {
+            throw new IllegalStateException("Total cost cannot be negative");
+        }
+        if (total > MAX_CART_TOTAL) {
+            throw new IllegalStateException("Total cost exceeds the maximum allowed");
+        }
+        return total;
     }
 
     private int getItemQuantity(String itemName) {
