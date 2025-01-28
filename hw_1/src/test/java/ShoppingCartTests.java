@@ -9,4 +9,10 @@ public class ShoppingCartTests {
     public void testDefault() { // TODO remove
         assertEquals("hi", "hi");
     }
+    @Test
+    public void newCartIsEmpty() {
+        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        assertEquals(0, cart.items().size());
+    }
+    
 }

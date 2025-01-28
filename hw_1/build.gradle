@@ -9,6 +9,7 @@ plugins {
     id 'java'
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+    id 'jacoco'
 }
 
 repositories {
@@ -33,6 +34,21 @@ java {
 application {
     // Define the main class for the application.
     mainClass = 'ShoppingCart'
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+test {
+    finalizedBy jacocoTestReport // Generate the report after tests are executed
+}
+
+jacocoTestReport {
+    reports {
+        xml.required.set(true) // Enable XML report (for CI/CD pipelines)
+        html.required.set(true) // Enable HTML report (for human-readable view)
+    }
 }
 
 tasks.named('test') {
