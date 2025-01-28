@@ -1,6 +1,8 @@
 package hw_1;
 import java.util.*;
 
+import hw_1.ShoppingCart;
+
 public class main {
     public static void main(String[] args) {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
