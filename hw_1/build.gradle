@@ -38,6 +38,7 @@ application {
 
 jacoco {
     toolVersion = "0.8.12"
+    reportsDirectory = layout.buildDirectory.dir("${buildDir}/reports")
 }
 
 test {
@@ -48,6 +49,7 @@ jacocoTestReport {
     reports {
         xml.required.set(true) // Enable XML report (for CI/CD pipelines)
         html.required.set(true) // Enable HTML report (for human-readable view)
+        // html.destination file("${buildDir}/report.html")
     }
 }
 

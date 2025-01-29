@@ -1,4 +1,4 @@
-package hw_1.src.main.java;
+package hw_1;
 
 public class Item {
   private final String name;
