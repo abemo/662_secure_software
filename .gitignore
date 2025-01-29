@@ -1,5 +1,9 @@
 *.class
 
+# Auto-generated files
+.vscode
+.DS_Store
+
 # Prerequisites
 *.d
 
