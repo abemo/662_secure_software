@@ -10,12 +10,13 @@ public class ShoppingCartTests {
     public void newCartIsEmpty() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         assertEquals(0, cart.items().size());
+        assertEquals(0, cart.size());
     }
 
     @Test
     public void validCustomerId() {
         ShoppingCart cart = new ShoppingCart("XHQ81739JK-Q");
-        assertEquals(0, cart.items().size());
+        assertEquals(0, cart.size());
     }
 
     @Test
@@ -129,6 +130,15 @@ public class ShoppingCartTests {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         cart.addItem("apple", 5);
         assertEquals(5, cart.items().get("apple"));
+        assertEquals(5, cart.size());
+    }
+
+    @Test
+    public void addMultipleItems() {
+        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        cart.addItem("apple", 5);
+        cart.addItem("book", 2);
+        assertEquals(7, cart.size());
     }
 
     @Test
@@ -137,6 +147,7 @@ public class ShoppingCartTests {
         cart.addItem("apple", 5);
         cart.removeItem("apple", 3);
         assertEquals(2, cart.items().get("apple"));
+        assertEquals(2, cart.size());
     }
 
     @Test
@@ -234,7 +245,7 @@ public class ShoppingCartTests {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         cart.addItem("apple", 1);
         cart.removeItem("apple", 1);
-        assertEquals(0, cart.items().size());
+        assertEquals(0, cart.size());
     }
 
     @Test
@@ -243,7 +254,7 @@ public class ShoppingCartTests {
         cart.addItem("apple", 1);
         cart.addItem("apple", 1);
         cart.removeItem("apple", 2);
-        assertEquals(0, cart.items().size());
+        assertEquals(0, cart.size());
     }
 
     @Test
@@ -311,7 +322,7 @@ public class ShoppingCartTests {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> cart.addItem("laptop", 3));
         assertEquals("Total cost of cart cannot exceed 2500.00", exception.getMessage());
-        assertEquals(0, cart.items().size());
+        assertEquals(0, cart.size());
     }
 
     @Test
@@ -322,8 +333,7 @@ public class ShoppingCartTests {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> cart.addItem("laptop", 1));
         assertEquals("Total cost of cart cannot exceed 2500.00", exception.getMessage());
-        assertEquals(1, cart.items().size());
-        assertEquals(2, cart.items().get("laptop"));
+        assertEquals(2, cart.size());
     }
 
     // TODO: implement max cart size

@@ -15,6 +15,7 @@ public final class ShoppingCart {
     private final Map<String, Integer> items;
     private static final int MAX_QUANTITY = 100;
     private static final int MAX_ITEM_NAME_LENGTH = 50;
+    private static final int MAX_CART_SIZE = 200;
     private static final double MAX_CART_TOTAL = 2500.0;
     private static final Pattern ITEM_NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9 ]{1,50}$");
     private static final Set<String> CATALOG = Set.of("apple", "banana", "orange", "laptop", "book");
@@ -83,6 +84,14 @@ public final class ShoppingCart {
         return total;
     }
 
+    public int size() {
+        int size = 0;
+        for (int itemQuantity : items.values()) {
+            size += itemQuantity;
+        }
+        return size;
+    }
+
     private int getItemQuantity(String itemName) {
         if (!items.containsKey(itemName)) {
             throw new IllegalArgumentException("Item does not exist in cart");
@@ -122,6 +131,8 @@ public final class ShoppingCart {
             throw new IllegalArgumentException(String.format(
                     "Quantity must be between 1 and %d", MAX_QUANTITY));
         }
+
+        // if ()
         // TODO: check cart size
     }
 
