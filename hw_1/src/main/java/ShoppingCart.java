@@ -1,4 +1,5 @@
 package hw_1;
+
 import java.util.UUID;
 import java.util.Map;
 import java.util.HashMap;
@@ -16,17 +17,17 @@ public final class ShoppingCart {
     private static final double MAX_CART_TOTAL = 2500.0;
     private static final Pattern ITEM_NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9 ]{1,50}$");
     private static final Set<String> CATALOG = Set.of("apple", "banana", "orange", "laptop", "book");
-    private static final Map<String, Double> PRICES = Map.of("apple", 0.5, "banana", 0.3, "orange", 0.4, "laptop", 1000.0, "book", 20.0);
+    private static final Map<String, Double> PRICES = Map.of("apple", 0.5, "banana", 0.3, "orange", 0.4, "laptop",
+            1000.0, "book", 20.0);
 
-
-    public ShoppingCart(String customerID){
+    public ShoppingCart(String customerID) {
         validateCustomerID(customerID);
         this.CART_ID = UUID.randomUUID();
         this.CUSTOMER_ID = customerID;
         this.items = new HashMap<>();
     }
 
-    public UUID cartId() { 
+    public UUID cartId() {
         return this.CART_ID;
     }
 
@@ -41,7 +42,7 @@ public final class ShoppingCart {
     public void addItem(String itemName, int quantity) {
         itemName = itemName.toLowerCase();
         validateItemName(itemName);
-        validateQuantity(quantity);
+        validateQuantity(quantity, itemName);
         items.put(itemName, items.getOrDefault(itemName, 0) + quantity);
     }
 
@@ -51,9 +52,10 @@ public final class ShoppingCart {
         }
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be greater than 0");
-        } 
+        }
         if (quantity > getItemQuantity(itemName)) {
-            throw new IllegalArgumentException("Quantity exceeds the quantity of the item in the cart");
+            throw new IllegalArgumentException(String.format(
+                    "Quantity exceeds the quantity of the item in the cart, you have %d", getItemQuantity(itemName)));
         }
         items.put(itemName, items.get(itemName) - quantity);
     }
@@ -92,23 +94,25 @@ public final class ShoppingCart {
     }
 
     private void validateItemName(String itemName) {
-        if (!CATALOG.contains(itemName.toLowerCase())) {
-            throw new IllegalArgumentException("Invalid item. Not in catalog.");
-        }
-        if (!ITEM_NAME_PATTERN.matcher(itemName).matches()) {
-            throw new IllegalArgumentException("Invalid item name format");
-        }
         if (itemName.length() > MAX_ITEM_NAME_LENGTH) {
             throw new IllegalArgumentException("Item name is too long");
         }
         if (itemName.isBlank()) {
             throw new IllegalArgumentException("Item name cannot be empty");
         }
+        if (!ITEM_NAME_PATTERN.matcher(itemName).matches()) {
+            throw new IllegalArgumentException("Item names must only contain letters, numbers, and spaces.");
+        }
+        if (!CATALOG.contains(itemName.toLowerCase())) {
+            throw new IllegalArgumentException("Item is not in the catalog");
+        }
     }
 
-    private void validateQuantity(int quantity) {
+    private void validateQuantity(int quantity, String itemName) {
         if (quantity <= 0 || quantity > MAX_QUANTITY) {
-            throw new IllegalArgumentException("Quantity must be between 1 and " + MAX_QUANTITY);
+            throw new IllegalArgumentException(String.format(
+                    "Quantity must be between 1 and %d. You currently have %d.", MAX_QUANTITY,
+                    getItemQuantity(itemName)));
         }
     }
 

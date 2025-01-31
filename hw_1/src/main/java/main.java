@@ -1,4 +1,5 @@
 package hw_1;
+
 import java.util.*;
 
 import hw_1.ShoppingCart;
@@ -9,6 +10,7 @@ public class main {
         cart.addItem("APPLE", 5);
         cart.addItem("apple", 5);
         cart.addItem("banana", 100);
+        cart.addItem("banana", 0);
         System.out.println(cart.items());
         System.out.println("------------------------------------");
         cart.removeItem("apple", 3);
