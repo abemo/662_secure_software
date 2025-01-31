@@ -52,14 +52,24 @@ public final class ShoppingCart {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be greater than 0");
         }
+
         if (!items.containsKey(itemName)) {
             throw new IllegalArgumentException("Item does not exist in cart");
         }
-        if (quantity > getItemQuantity(itemName)) {
+
+        int itemQuantity = getItemQuantity(itemName);
+
+        if (quantity > itemQuantity) {
             throw new IllegalArgumentException(String.format(
-                    "Quantity exceeds the quantity of the item in the cart. You have %d.", getItemQuantity(itemName)));
+                    "Quantity exceeds the quantity of the item in the cart. You have %d.", itemQuantity));
         }
-        items.put(itemName, items.get(itemName) - quantity);
+
+        int newQuantity = itemQuantity - quantity;
+        if (newQuantity == 0) {
+            items.remove(itemName);
+        } else {
+            items.put(itemName, newQuantity);
+        }
     }
 
     public double totalCost() {

@@ -230,6 +230,23 @@ public class ShoppingCartTests {
     }
 
     @Test
+    public void testRemoveSingleItem() {
+        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        cart.addItem("apple", 1);
+        cart.removeItem("apple", 1);
+        assertEquals(0, cart.items().size());
+    }
+
+    @Test
+    public void testRemoveMultipleItems() {
+        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        cart.addItem("apple", 1);
+        cart.addItem("apple", 1);
+        cart.removeItem("apple", 2);
+        assertEquals(0, cart.items().size());
+    }
+
+    @Test
     public void itemNotInCartCannotBeRemoved() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         Throwable exception = assertThrows(IllegalArgumentException.class,
