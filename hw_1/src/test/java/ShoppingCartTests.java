@@ -263,4 +263,68 @@ public class ShoppingCartTests {
         });
         assertEquals("Quantity exceeds the quantity of the item in the cart. You have 1.", exception.getMessage());
     }
+
+    @Test
+    public void totalCostEmptyCart() {
+        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        assertEquals(0, cart.totalCost());
+    }
+
+    @Test
+    public void totalCostSingleItem() {
+        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        cart.addItem("apple", 1);
+        assertEquals(0.5, cart.totalCost());
+    }
+
+    @Test
+    public void totalCostDuplicateItem() {
+        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        cart.addItem("apple", 5);
+        assertEquals(2.5, cart.totalCost());
+    }
+
+    @Test
+    public void totalCostMultipleItems() {
+        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        cart.addItem("laptop", 1);
+        cart.addItem("book", 1);
+        cart.addItem("banana", 1);
+        cart.addItem("orange", 1);
+        assertEquals(1020.7, cart.totalCost());
+    }
+
+    @Test
+    public void totalCostMultipleDuplicateItems() {
+        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        cart.addItem("laptop", 1);
+        cart.addItem("book", 3);
+        cart.addItem("banana", 1);
+        cart.addItem("banana", 1);
+        cart.addItem("orange", 2);
+        assertEquals(1061.4, cart.totalCost());
+    }
+
+    @Test
+    public void totalCostUpperBound() {
+        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> cart.addItem("laptop", 3));
+        assertEquals("Total cost of cart cannot exceed 2500.00", exception.getMessage());
+        assertEquals(0, cart.items().size());
+    }
+
+    @Test
+    public void totalCostUpperBoundIncremental() {
+        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        cart.addItem("laptop", 2);
+
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> cart.addItem("laptop", 1));
+        assertEquals("Total cost of cart cannot exceed 2500.00", exception.getMessage());
+        assertEquals(1, cart.items().size());
+        assertEquals(2, cart.items().get("laptop"));
+    }
+
+    // TODO: implement max cart size
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Collections;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public final class ShoppingCart {
     private final UUID CART_ID;
@@ -43,9 +44,11 @@ public final class ShoppingCart {
         itemName = itemName.toLowerCase();
         validateItemName(itemName);
 
-        int itemQuantity = items.getOrDefault(itemName, 0) + quantity;
-        validateQuantity(itemQuantity);
-        items.put(itemName, itemQuantity);
+        int totalItemQuantity = items.getOrDefault(itemName, 0) + quantity;
+        validateQuantity(totalItemQuantity);
+        validateTotalCost(itemName, quantity);
+
+        items.put(itemName, totalItemQuantity);
     }
 
     public void removeItem(String itemName, int quantity) {
@@ -76,12 +79,6 @@ public final class ShoppingCart {
         double total = 0;
         for (Map.Entry<String, Integer> entry : items.entrySet()) {
             total += PRICES.get(entry.getKey()) * entry.getValue();
-        }
-        if (total < 0) {
-            throw new IllegalStateException("Total cost cannot be negative");
-        }
-        if (total > MAX_CART_TOTAL) {
-            throw new IllegalStateException("Total cost exceeds the maximum allowed");
         }
         return total;
     }
@@ -124,6 +121,13 @@ public final class ShoppingCart {
         if (quantity <= 0 || quantity > MAX_QUANTITY) {
             throw new IllegalArgumentException(String.format(
                     "Quantity must be between 1 and %d", MAX_QUANTITY));
+        }
+        // TODO: check cart size
+    }
+
+    private void validateTotalCost(String itemName, int quantity) {
+        if (totalCost() + PRICES.get(itemName) * quantity > MAX_CART_TOTAL) {
+            throw new IllegalArgumentException(String.format("Total cost of cart cannot exceed %.2f", MAX_CART_TOTAL));
         }
     }
 
