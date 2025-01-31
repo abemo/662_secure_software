@@ -132,13 +132,16 @@ public final class ShoppingCart {
                     "Quantity must be between 1 and %d", MAX_QUANTITY));
         }
 
-        // if ()
-        // TODO: check cart size
+        if (size() + quantity > MAX_CART_SIZE) {
+            throw new IllegalArgumentException(String.format(
+                    "Total number of items cannot exceed %d", MAX_CART_SIZE));
+        }
     }
 
     private void validateTotalCost(String itemName, int quantity) {
         if (totalCost() + PRICES.get(itemName) * quantity > MAX_CART_TOTAL) {
-            throw new IllegalArgumentException(String.format("Total cost of cart cannot exceed %.2f", MAX_CART_TOTAL));
+            throw new IllegalArgumentException(String.format(
+                    "Total cost of cart cannot exceed %.2f", MAX_CART_TOTAL));
         }
     }
 

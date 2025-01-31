@@ -336,5 +336,13 @@ public class ShoppingCartTests {
         assertEquals(2, cart.size());
     }
 
-    // TODO: implement max cart size
+    @Test
+    public void cartSizeUpperBound() {
+        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        cart.addItem("apple", 100);
+        cart.addItem("orange", 100);
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> cart.addItem("banana", 1));
+        assertEquals("Total number of items cannot exceed 200", exception.getMessage());
+    }
 }
