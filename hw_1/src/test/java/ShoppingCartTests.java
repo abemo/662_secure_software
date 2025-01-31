@@ -1,7 +1,6 @@
 package hw_1;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +10,13 @@ public class ShoppingCartTests {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         assertEquals(0, cart.items().size());
         assertEquals(0, cart.size());
+    }
+
+    @Test
+    public void cartHasUniqueId() {
+        ShoppingCart cartA = new ShoppingCart("ABC12345DE-A");
+        ShoppingCart cartQ = new ShoppingCart("ABC12345DE-Q");
+        assertNotEquals(cartA.cartId(), cartQ.cartId());
     }
 
     @Test
