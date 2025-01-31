@@ -57,10 +57,6 @@ public final class ShoppingCart {
             throw new IllegalArgumentException("Quantity must be greater than 0");
         }
 
-        if (!items.containsKey(itemName)) {
-            throw new IllegalArgumentException("Item does not exist in cart");
-        }
-
         int itemQuantity = getItemQuantity(itemName);
 
         if (quantity > itemQuantity) {
