@@ -14,14 +14,16 @@ Specification
 - [✅] Ensure the id and customer id of the cart can never be changed.
 - [✅] Provide a method to get the total cost of the items in the cart.
 - [✅] Store shopping cart ids as uuid4s.
-- [✅] Require customer ids to have the following form: 3 letters, 5 numbers, 2 letters, a dash, and finally an A or a Q.
+- [❌] Require customer ids to have the following form: 3 letters, 5 numbers, 2 letters, a dash, and finally an A or a Q.
+  - update letter to allow any unicode letter
 - [✅] Ensure negative quantities for any item in the cart can never appear.
 - [❌] Check for upper bounds on every quantity as well
-- [❌] Make sure items added to the cart are in some kind of catalog, and are not just made up (hack in) by an adversary.
-- [❌] Ensure item names are length-bounded and the characters in the names restricted.
+- [✅] Make sure items added to the cart are in some kind of catalog, and are not just made up (hack in) by an adversary.
+- [✅] Ensure item names are length-bounded and the characters in the names restricted.
+  - allow unicode letters in item names
 - [✅] Employ immutability everywhere that it makes sense to. (Immutability should always be the default.)
 - [✅] Maintain integrity at all times. (Do not allow bad data to creep in, ever. If something is wrong, throw an exception)
-- [❌] Install a security linter, such as SonarCube
+- [✅] Install a security linter, such as SonarCube
 - [❌] 3 points for giving the link so I can find your code
 - [❌] 10 points that the tests can be found and run, and that they all pass and have good coverage
 - [ ] 5 points that the whole file was formatted well
