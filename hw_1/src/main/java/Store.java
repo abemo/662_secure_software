@@ -69,6 +69,8 @@ public final class Store {
     }
 
     private static void ensureCustomerExists(String customerID) {
+        validateCustomerID(customerID);
+
         if (!carts.containsKey(customerID)) {
             throw new IllegalArgumentException(String.format("No cart exists for the customer ID %s", customerID));
         }

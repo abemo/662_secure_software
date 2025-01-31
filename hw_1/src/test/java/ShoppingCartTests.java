@@ -32,9 +32,16 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void customerIdCannotBeNull() {
+    public void createCartNullCustomerID() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> Store.createCart(null));
+        assertEquals("Customer ID cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void addItemNullCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem(null, "apple", 1));
         assertEquals("Customer ID cannot be null", exception.getMessage());
     }
 
