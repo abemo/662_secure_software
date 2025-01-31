@@ -33,7 +33,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'ShoppingCart'
+    mainClass = 'Store'
 }
 
 jacoco {
