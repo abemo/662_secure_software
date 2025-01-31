@@ -1,6 +1,7 @@
 package hw_1;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +9,12 @@ public class ShoppingCartTests {
     @Test
     public void newCartIsEmpty() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        assertEquals(0, cart.items().size());
+    }
+
+    @Test
+    public void validCustomerId() {
+        ShoppingCart cart = new ShoppingCart("XHQ81739JK-Q");
         assertEquals(0, cart.items().size());
     }
 
@@ -46,10 +53,71 @@ public class ShoppingCartTests {
         }
     }
 
-    // @Test
-    // public void 
+    @Test
+    public void testCustomerId_t0() {
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> new ShoppingCart("ABCD12345DE-A"));
+        assertEquals("Invalid customer ID format", exception.getMessage());
+    }
 
-    // 3 letters, 5 numbers, 2 letters, a dash, and finally an A or a Q.
+    @Test
+    public void testCustomerId_t1() {
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> new ShoppingCart("AB112345EF-A"));
+        assertEquals("Invalid customer ID format", exception.getMessage());
+    }
+
+    @Test
+    public void testCustomerId_t2() {
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> new ShoppingCart("AB12345EF-A"));
+        assertEquals("Invalid customer ID format", exception.getMessage());
+    }
+
+    @Test
+    public void testCustomerId_t3() {
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> new ShoppingCart("ABC123456EF-A"));
+        assertEquals("Invalid customer ID format", exception.getMessage());
+    }
+
+    @Test
+    public void testCustomerId_t4() {
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> new ShoppingCart("ABC1234AEF-A"));
+        assertEquals("Invalid customer ID format", exception.getMessage());
+    }
+
+    @Test
+    public void testCustomerId_t5() {
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> new ShoppingCart("ABC1234EF-A"));
+        assertEquals("Invalid customer ID format", exception.getMessage());
+    }
+
+    @Test
+    public void testCustomerId_t6() {
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> new ShoppingCart("ABC12345EFG-A"));
+        assertEquals("Invalid customer ID format", exception.getMessage());
+    }
+
+    @Test
+    public void testCustomerId_t7() {
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> new ShoppingCart("ABC12345E1-A"));
+        assertEquals("Invalid customer ID format", exception.getMessage());
+    }
+
+    @Test
+    public void testCustomerId_t8() {
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> new ShoppingCart("ABC12345E-A"));
+        assertEquals("Invalid customer ID format", exception.getMessage());
+    }
+
+    @Test
+    public void testCustomerId_t9() {
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> new ShoppingCart("ABC12345EF_A"));
+        assertEquals("Invalid customer ID format", exception.getMessage());
+    }
+
+    @Test
+    public void testCustomerId_t10() {
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> new ShoppingCart("ABC12345EF-X"));
+        assertEquals("Invalid customer ID format", exception.getMessage());
+    }
 
     @Test
     public void addItemAddsItem() {
