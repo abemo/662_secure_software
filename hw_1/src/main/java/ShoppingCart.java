@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public final class ShoppingCart {
     private final UUID CART_ID;
     private final String CUSTOMER_ID;
-    private static final Pattern CUSTOMER_ID_PATTERN = Pattern.compile("^[a-zA-Z]{3}[\\d]{5}[a-zA-Z]{2}[-][AQ]$");
+    private static final Pattern CUSTOMER_ID_PATTERN = Pattern.compile("^\\p{L}{3}[\\d]{5}[a-zA-Z]{2}[-][AQ]$");
     private final Map<String, Integer> items;
     private static final int MAX_QUANTITY = 100;
     private static final int MAX_ITEM_NAME_LENGTH = 50;
@@ -42,7 +42,7 @@ public final class ShoppingCart {
     public void addItem(String itemName, int quantity) {
         itemName = itemName.toLowerCase();
         validateItemName(itemName);
-        validateQuantity(quantity, itemName);
+        validateQuantity(quantity);
         items.put(itemName, items.getOrDefault(itemName, 0) + quantity);
     }
 
@@ -55,7 +55,7 @@ public final class ShoppingCart {
         }
         if (quantity > getItemQuantity(itemName)) {
             throw new IllegalArgumentException(String.format(
-                    "Quantity exceeds the quantity of the item in the cart, you have %d", getItemQuantity(itemName)));
+                    "Quantity exceeds the quantity of the item in the cart. You have %d.", getItemQuantity(itemName)));
         }
         items.put(itemName, items.get(itemName) - quantity);
     }
@@ -108,11 +108,10 @@ public final class ShoppingCart {
         }
     }
 
-    private void validateQuantity(int quantity, String itemName) {
+    private void validateQuantity(int quantity) {
         if (quantity <= 0 || quantity > MAX_QUANTITY) {
             throw new IllegalArgumentException(String.format(
-                    "Quantity must be between 1 and %d. You currently have %d.", MAX_QUANTITY,
-                    getItemQuantity(itemName)));
+                    "Quantity must be between 1 and %d", MAX_QUANTITY));
         }
     }
 

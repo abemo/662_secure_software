@@ -9,6 +9,7 @@ public class main {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         cart.addItem("APPLE", 5);
         cart.addItem("apple", 5);
+        cart.removeItem("apple", -1);
         cart.addItem("banana", 100);
         cart.addItem("banana", 0);
         System.out.println(cart.items());
