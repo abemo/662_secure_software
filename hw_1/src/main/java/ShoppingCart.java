@@ -42,8 +42,10 @@ public final class ShoppingCart {
     public void addItem(String itemName, int quantity) {
         itemName = itemName.toLowerCase();
         validateItemName(itemName);
-        validateQuantity(quantity);
-        items.put(itemName, items.getOrDefault(itemName, 0) + quantity);
+
+        int itemQuantity = items.getOrDefault(itemName, 0) + quantity;
+        validateQuantity(itemQuantity);
+        items.put(itemName, itemQuantity);
     }
 
     public void removeItem(String itemName, int quantity) {
