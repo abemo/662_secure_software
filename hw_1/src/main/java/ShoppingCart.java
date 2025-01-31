@@ -47,11 +47,11 @@ public final class ShoppingCart {
     }
 
     public void removeItem(String itemName, int quantity) {
-        if (!items.containsKey(itemName)) {
-            throw new IllegalArgumentException("Item does not exist in cart");
-        }
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be greater than 0");
+        }
+        if (!items.containsKey(itemName)) {
+            throw new IllegalArgumentException("Item does not exist in cart");
         }
         if (quantity > getItemQuantity(itemName)) {
             throw new IllegalArgumentException(String.format(
