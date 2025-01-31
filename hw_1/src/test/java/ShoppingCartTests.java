@@ -12,7 +12,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void CustomerIdCannotChange() {
+    public void customerIdCannotChange() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         String customerId = cart.customerId();
         customerId = "ABC12345DE-B";
@@ -20,7 +20,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void CustomerIdCannotBeNull() {
+    public void customerIdCannotBeNull() {
         try {
             new ShoppingCart(null);
         } catch (IllegalArgumentException e) {
@@ -29,7 +29,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void CustomerIdCannotBeEmpty() {
+    public void customerIdCannotBeEmpty() {
         try {
             new ShoppingCart("");
         } catch (IllegalArgumentException e) {
@@ -38,13 +38,18 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void CustomerIdMustBeValidFormat() {
+    public void customerIdMustBeValidFormat() {
         try {
             new ShoppingCart("ABC12345DE-1");
         } catch (IllegalArgumentException e) {
             assertEquals("Invalid customer ID format", e.getMessage());
         }
     }
+
+    // @Test
+    // public void 
+
+    // 3 letters, 5 numbers, 2 letters, a dash, and finally an A or a Q.
 
     @Test
     public void addItemAddsItem() {
@@ -62,7 +67,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void ItemNameNoSymbols() {
+    public void itemNameNoSymbols() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         try {
             cart.addItem("$$$", 99);
@@ -72,7 +77,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void ItemNameOtherLanguages() {
+    public void itemNameOtherLanguages() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         try {
             cart.addItem("Hello 你好 привет مرحبًا", 99);
@@ -82,7 +87,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void ItemNameTooLong() {
+    public void itemNameTooLong() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         try {
             cart.addItem("0123456789 0123456789 0123456789 0123456789 0123456789", 99);
@@ -93,7 +98,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void ItemNameTooShort() {
+    public void itemNameTooShort() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         try {
             cart.addItem("", 99);
@@ -104,7 +109,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void ItemMustBeInCatalog() {
+    public void itemMustBeInCatalog() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         try {
             cart.addItem("skibidi toilet", 69);
@@ -114,7 +119,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void CannotAddZeroItems() {
+    public void cannotAddZeroItems() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         try {
             cart.addItem("apple", 0);
@@ -124,7 +129,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void CannotAddNegativeItems() {
+    public void cannotAddNegativeItems() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         try {
             cart.addItem("apple", -1);
@@ -134,7 +139,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void CannotAddMoreThan100Items() {
+    public void cannotAddMoreThan100Items() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         try {
             cart.addItem("apple", 101);
@@ -144,7 +149,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void CannotRemoveZeroItems() {
+    public void cannotRemoveZeroItems() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         try {
             cart.removeItem("apple", 0);
@@ -154,7 +159,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void CannotRemoveNegativeItems() {
+    public void cannotRemoveNegativeItems() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         try {
             cart.removeItem("apple", -1);
@@ -164,7 +169,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void CannotIncrementOver100() {
+    public void cannotIncrementOver100() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         try {
             cart.addItem("apple", 100);
@@ -175,7 +180,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void CannotDecrementBelow1() {
+    public void cannotDecrementBelow1() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         try {
             cart.addItem("apple", 1);
@@ -186,7 +191,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void ItemNotInCartCannotBeRemoved() {
+    public void itemNotInCartCannotBeRemoved() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         try {
             cart.removeItem("apple", 1);
@@ -196,7 +201,7 @@ public class ShoppingCartTests {
     }
 
     @Test
-    public void CannotRemoveMoreItemsThanInCart() {
+    public void cannotRemoveMoreItemsThanInCart() {
         ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         try {
             cart.addItem("apple", 1);
