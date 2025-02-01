@@ -2,353 +2,1026 @@ package hw_1;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.*;
 
 public class ShoppingCartTests {
-    @Test
-    public void newCartIsEmpty() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-        assertEquals(0, cart.items().size());
-        assertEquals(0, cart.size());
+    private static final String CUSTOMER_ID = "ABC12345DE-A";
+
+    @BeforeAll
+    public static void initializeStore() {
+        Store.createCart(CUSTOMER_ID);
+    }
+
+    @BeforeEach
+    public void clearCart() {
+        Store.clearCart(CUSTOMER_ID);
+        assertEquals(0, Store.cartSize(CUSTOMER_ID));
     }
 
     @Test
-    public void cartHasUniqueId() {
-        ShoppingCart cartA = new ShoppingCart("ABC12345DE-A");
-        ShoppingCart cartQ = new ShoppingCart("ABC12345DE-Q");
-        assertNotEquals(cartA.cartId(), cartQ.cartId());
+    public void newCartIsEmpty() {
+        assertEquals(0, Store.cartSize(CUSTOMER_ID));
+    }
+
+    @Test
+    public void oneCartPerCustomer() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.createCart(CUSTOMER_ID));
+        assertEquals("Only 1 cart per customer allowed", exception.getMessage());
     }
 
     @Test
     public void validCustomerId() {
-        ShoppingCart cart = new ShoppingCart("XHQ81739JK-Q");
-        assertEquals(0, cart.size());
+        Store.createCart("XHQ81739JK-Q");
+        assertEquals(0, Store.cartSize("XHQ81739JK-Q"));
     }
 
     @Test
-    public void customerIdCannotChange() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-        String customerId = cart.customerId();
-        customerId = "ABC12345DE-B";
-        assertEquals("ABC12345DE-A", cart.customerId());
-    }
-
-    @Test
-    public void customerIdCannotBeNull() {
+    public void createCartNullCustomerID() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> new ShoppingCart(null));
+                () -> Store.createCart(null));
         assertEquals("Customer ID cannot be null", exception.getMessage());
     }
 
     @Test
-    public void customerIdCannotBeEmpty() {
+    public void itemsNullCustomerID() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> new ShoppingCart(""));
+                () -> Store.items(null));
+        assertEquals("Customer ID cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void addItemNullCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem(null, "apple", 1));
+        assertEquals("Customer ID cannot be null", exception.getMessage());
+    }
+    
+    @Test
+    public void removeItemNullCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem(null, "apple", 1));
+        assertEquals("Customer ID cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void totalCostNullCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost(null));
+        assertEquals("Customer ID cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeNullCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize(null));
+        assertEquals("Customer ID cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void createCartEmptyCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.createCart(""));
         assertEquals("Customer ID cannot be empty", exception.getMessage());
     }
 
     @Test
-    public void customerIdMustBeValidFormat() {
+    public void itemsEmptyCustomerID() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> new ShoppingCart("ABC12345DE-1"));
-        assertEquals("Invalid customer ID format", exception.getMessage());
+                () -> Store.items(""));
+        assertEquals("Customer ID cannot be empty", exception.getMessage());
     }
 
     @Test
-    public void testCustomerId_t0() {
+    public void addItemEmptyCustomerID() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> new ShoppingCart("ABCD12345DE-A"));
-        assertEquals("Invalid customer ID format", exception.getMessage());
+                () -> Store.addItem("", "apple", 1));
+        assertEquals("Customer ID cannot be empty", exception.getMessage());
     }
-
+    
     @Test
-    public void testCustomerId_t1() {
+    public void removeItemEmptyCustomerID() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> new ShoppingCart("AB112345EF-A"));
-        assertEquals("Invalid customer ID format", exception.getMessage());
+                () -> Store.removeItem("", "apple", 1));
+        assertEquals("Customer ID cannot be empty", exception.getMessage());
     }
 
     @Test
-    public void testCustomerId_t2() {
+    public void totalCostEmptyCustomerID() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> new ShoppingCart("AB12345EF-A"));
-        assertEquals("Invalid customer ID format", exception.getMessage());
+                () -> Store.totalCost(""));
+        assertEquals("Customer ID cannot be empty", exception.getMessage());
     }
 
     @Test
-    public void testCustomerId_t3() {
+    public void cartSizeEmptyCustomerID() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> new ShoppingCart("ABC123456EF-A"));
-        assertEquals("Invalid customer ID format", exception.getMessage());
+                () -> Store.cartSize(""));
+        assertEquals("Customer ID cannot be empty", exception.getMessage());
     }
 
     @Test
-    public void testCustomerId_t4() {
+    public void createCartInvalidEndCustomerID() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> new ShoppingCart("ABC1234AEF-A"));
-        assertEquals("Invalid customer ID format", exception.getMessage());
+                () -> Store.createCart("ABC12345DE-1"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
     }
 
     @Test
-    public void testCustomerId_t5() {
+    public void itemsInvalidEndCustomerID() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> new ShoppingCart("ABC1234EF-A"));
-        assertEquals("Invalid customer ID format", exception.getMessage());
+                () -> Store.items("ABC12345DE-1"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
     }
 
     @Test
-    public void testCustomerId_t6() {
+    public void addItemInvalidEndCustomerID() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> new ShoppingCart("ABC12345EFG-A"));
-        assertEquals("Invalid customer ID format", exception.getMessage());
+                () -> Store.addItem("ABC12345DE-1", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
     }
 
     @Test
-    public void testCustomerId_t7() {
+    public void removeItemInvalidEndCustomerID() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> new ShoppingCart("ABC12345E1-A"));
-        assertEquals("Invalid customer ID format", exception.getMessage());
+                () -> Store.removeItem("ABC12345DE-1", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
     }
 
     @Test
-    public void testCustomerId_t8() {
+    public void totalCostInvalidEndCustomerID() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> new ShoppingCart("ABC12345E-A"));
-        assertEquals("Invalid customer ID format", exception.getMessage());
+                () -> Store.totalCost("ABC12345DE-1"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
     }
 
     @Test
-    public void testCustomerId_t9() {
+    public void cartSizeInvalidEndCustomerID() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> new ShoppingCart("ABC12345EF_A"));
-        assertEquals("Invalid customer ID format", exception.getMessage());
+                () -> Store.cartSize("ABC12345DE-1"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
     }
 
     @Test
-    public void testCustomerId_t10() {
+    public void createCartCustomerID_part1TooLong() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> new ShoppingCart("ABC12345EF-X"));
-        assertEquals("Invalid customer ID format", exception.getMessage());
+                () -> Store.createCart("ABCD12345DE-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
     }
 
     @Test
-    public void addItemAddsItem() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-        cart.addItem("apple", 5);
-        assertEquals(5, cart.items().get("apple"));
-        assertEquals(5, cart.size());
+    public void itemsCustomerID_part1TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items("ABCD12345DE-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
     }
 
     @Test
-    public void addMultipleItems() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-        cart.addItem("apple", 5);
-        cart.addItem("book", 2);
-        assertEquals(7, cart.size());
+    public void addItemCustomerID_part1TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem("ABCD12345DE-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
     }
 
     @Test
-    public void removeItemRemovesItem() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-        cart.addItem("apple", 5);
-        cart.removeItem("apple", 3);
-        assertEquals(2, cart.items().get("apple"));
-        assertEquals(2, cart.size());
+    public void removeItemCustomerID_part1TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem("ABCD12345DE-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void totalCostCustomerID_part1TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost("ABCD12345DE-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeCustomerID_part1TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize("ABCD12345DE-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+    
+    @Test
+    public void createCartCustomerID_part1InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.createCart("AB112345EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void itemsCustomerID_part1InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items("AB112345EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void addItemCustomerID_part1InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem("AB112345EF-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void removeItemCustomerID_part1InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem("AB112345EF-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void totalCostCustomerID_part1InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost("AB112345EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeCustomerID_part1InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize("AB112345EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+    
+    @Test
+    public void createCartCustomerID_part1TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.createCart("AB12345EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void itemsCustomerID_part1TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items("AB12345EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void addItemCustomerID_part1TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem("AB12345EF-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void removeItemCustomerID_part1TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem("AB12345EF-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void totalCostCustomerID_part1TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost("AB12345EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeCustomerID_part1TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize("AB12345EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void createCartCustomerID_part2TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.createCart("ABC123456EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void itemsCustomerID_part2TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items("ABC123456EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void addItemCustomerID_part2TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem("ABC123456EF-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void removeItemCustomerID_part2TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem("ABC123456EF-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void totalCostCustomerID_part2TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost("ABC123456EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeCustomerID_part2TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize("ABC123456EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+    
+    @Test
+    public void createCartCustomerID_part2InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.createCart("ABC1234AEF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void itemsCustomerID_part2InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items("ABC1234AEF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void addItemCustomerID_part2InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem("ABC1234AEF-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void removeItemCustomerID_part2InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem("ABC1234AEF-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void totalCostCustomerID_part2InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost("ABC1234AEF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeCustomerID_part2InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize("ABC1234AEF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+    
+    @Test
+    public void createCartCustomerID_part2TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.createCart("ABC1234EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void itemsCustomerID_part2TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items("ABC1234EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void addItemCustomerID_part2TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem("ABC1234EF-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void removeItemCustomerID_part2TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem("ABC1234EF-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void totalCostCustomerID_part2TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost("ABC1234EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeCustomerID_part2TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize("ABC1234EF-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void createCartCustomerID_part3TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.createCart("ABC12345EFG-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void itemsCustomerID_part3TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items("ABC12345EFG-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void addItemCustomerID_part3TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem("ABC12345EFG-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void removeItemCustomerID_part3TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem("ABC12345EFG-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void totalCostCustomerID_part3TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost("ABC12345EFG-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeCustomerID_part3TooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize("ABC12345EFG-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+    
+    @Test
+    public void createCartCustomerID_part3InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.createCart("ABC12345E1-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void itemsCustomerID_part3InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items("ABC12345E1-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void addItemCustomerID_part3InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem("ABC12345E1-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void removeItemCustomerID_part3InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem("ABC12345E1-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void totalCostCustomerID_part3InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost("ABC12345E1-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeCustomerID_part3InvalidCharacter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize("ABC12345E1-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+    
+    @Test
+    public void createCartCustomerID_part3TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.createCart("ABC12345E-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void itemsCustomerID_part3TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items("ABC12345E-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void addItemCustomerID_part3TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem("ABC12345E-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void removeItemCustomerID_part3TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem("ABC12345E-A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void totalCostCustomerID_part3TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost("ABC12345E-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeCustomerID_part3TooShort() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize("ABC12345E-A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+    
+    @Test
+    public void createCartCustomerID_underscore() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.createCart("ABC12345EF_A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void itemsCustomerID_underscore() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items("ABC12345EF_A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void addItemCustomerID_underscore() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem("ABC12345EF_A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void removeItemCustomerID_underscore() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem("ABC12345EF_A", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void totalCostCustomerID_underscore() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost("ABC12345EF_A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeCustomerID_underscore() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize("ABC12345EF_A"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+    
+    @Test
+    public void createCartCustomerID_missingDash() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.createCart("ABC12345EFA"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void itemsCustomerID_missingDash() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items("ABC12345EFA"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void addItemCustomerID_missingDash() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem("ABC12345EFA", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void removeItemCustomerID_missingDash() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem("ABC12345EFA", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void totalCostCustomerID_missingDash() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost("ABC12345EFA"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeCustomerID_missingDash() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize("ABC12345EFA"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+    
+    @Test
+    public void createCartCustomerID_invalidEndLetter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.createCart("ABC12345EF-X"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void itemsCustomerID_invalidEndLetter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items("ABC12345EF-X"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void addItemCustomerID_invalidEndLetter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem("ABC12345EF-X", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void removeItemCustomerID_invalidEndLetter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem("ABC12345EF-X", "apple", 1));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void totalCostCustomerID_invalidEndLetter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost("ABC12345EF-X"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeCustomerID_invalidEndLetter() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize("ABC12345EF-X"));
+        assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
+                exception.getMessage());
+    }
+
+    @Test
+    public void itemsNoCustomerIDFound() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items("ZYC12345EF-A"));
+        assertEquals("No cart exists for the customer ID ZYC12345EF-A", exception.getMessage());
+    }
+
+    @Test
+    public void addItemNoCustomerIDFound() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem("ZYC12345EF-A", "apple", 1));
+        assertEquals("No cart exists for the customer ID ZYC12345EF-A", exception.getMessage());
+    }
+
+    @Test
+    public void removeItemNoCustomerIDFound() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem("ZYC12345EF-A", "apple", 1));
+        assertEquals("No cart exists for the customer ID ZYC12345EF-A", exception.getMessage());
+    }
+
+    @Test
+    public void totalCostNoCustomerIDFound() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost("ZYC12345EF-A"));
+        assertEquals("No cart exists for the customer ID ZYC12345EF-A", exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeNoCustomerIDFound() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize("ZYC12345EF-A"));
+        assertEquals("No cart exists for the customer ID ZYC12345EF-A", exception.getMessage());
+    }
+
+    @Test
+    public void createCartCustomerID_allowsQ() {
+        Store.createCart("ABC12345EF-Q");
+        assertEquals(0, Store.cartSize("ABC12345EF-Q"));
+    }
+
+    @Test
+    public void itemsCustomerID_allowsQ() {
+        assertNotNull(Store.items("ABC12345EF-Q"));
+    }
+
+    @Test
+    public void addRemoveItemCustomerID_allowsQ() {
+        Store.addItem("ABC12345EF-Q", "apple", 1);
+        assertEquals(1, Store.cartSize("ABC12345EF-Q"));
+        assertEquals(0.5, Store.totalCost("ABC12345EF-Q"));
+
+        Store.removeItem("ABC12345EF-Q", "apple", 1);
+        assertEquals(0, Store.cartSize("ABC12345EF-Q"));
+        assertEquals(0, Store.totalCost("ABC12345EF-Q"));
+    }
+
+    @Test
+    public void addItemDuplicateItem() {
+        Store.addItem(CUSTOMER_ID, "apple", 5);
+        assertEquals(5, Store.cartSize(CUSTOMER_ID));
+        Map<String, Integer> expectedItems = Map.of("apple", 5);
+        assertTrue(expectedItems.equals(Store.items(CUSTOMER_ID)));
+    }
+
+    @Test
+    public void addItemMultipleItems() {
+        Store.addItem(CUSTOMER_ID, "apple", 5);
+        Store.addItem(CUSTOMER_ID, "book", 2);
+        assertEquals(7, Store.cartSize(CUSTOMER_ID));
+        Map<String, Integer> expectedItems = Map.of("apple", 5, "book", 2);
+        assertTrue(expectedItems.equals(Store.items(CUSTOMER_ID)));
+    }
+
+    @Test
+    public void testRemoveSomeOfItem() {
+        Store.addItem(CUSTOMER_ID, "apple", 5);
+        Store.removeItem(CUSTOMER_ID, "apple", 3);
+        assertEquals(2, Store.cartSize(CUSTOMER_ID));
+        Map<String, Integer> expectedItems = Map.of("apple", 2);
+        assertTrue(expectedItems.equals(Store.items(CUSTOMER_ID)));
+    }
+
+    @Test
+    public void testRemoveItem() {
+        Store.addItem(CUSTOMER_ID, "apple", 5);
+        Store.removeItem(CUSTOMER_ID, "apple", 5);
+        assertEquals(0, Store.cartSize(CUSTOMER_ID));
+        Map<String, Integer> expectedItems = new HashMap<>();
+        assertTrue(expectedItems.equals(Store.items(CUSTOMER_ID)));
+    }
+
+    @Test
+    public void itemsAreImmutable() {
+        Store.addItem(CUSTOMER_ID, "apple", 5);
+        Map<String, Integer> items = Store.items(CUSTOMER_ID);
+        assertThrows(UnsupportedOperationException.class,
+                () -> items.put("book", 2));
     }
 
     @Test
     public void itemNameNoSymbols() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> cart.addItem("$$$", 99));
-        assertEquals("Item names must only contain letters, numbers, and spaces.", exception.getMessage());
+                () -> Store.addItem(CUSTOMER_ID, "$$$", 99));
+        assertEquals("Item names must only contain letters, numbers, and spaces", exception.getMessage());
     }
 
     @Test
     public void itemNameOtherLanguages() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> cart.addItem("Hello 你好 привет مرحبًا", 99));
-        assertEquals("Item names must only contain letters, numbers, and spaces.", exception.getMessage());
+                () -> Store.addItem(CUSTOMER_ID, "Hello 你好 привет مرحبًا", 99));
+        assertEquals("Item names must only contain letters, numbers, and spaces", exception.getMessage());
     }
 
     @Test
     public void itemNameTooLong() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> cart.addItem("0123456789 0123456789 0123456789 0123456789 0123456789", 99));
-        assertEquals("Item name is too long", exception.getMessage());
+                () -> Store.addItem(CUSTOMER_ID, "0123456789 0123456789 0123456789 0123456789 0123456789", 99));
+        assertEquals("Item name cannot be more than 50 characters", exception.getMessage());
     }
 
     @Test
-    public void itemNameTooShort() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+    public void itemNameEmpty() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> cart.addItem("", 99));
+                () -> Store.addItem(CUSTOMER_ID, "", 99));
         assertEquals("Item name cannot be empty", exception.getMessage());
     }
 
     @Test
     public void itemMustBeInCatalog() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> cart.addItem("skibidi toilet", 69));
+                () -> Store.addItem(CUSTOMER_ID, "skibidi toilet", 69));
         assertEquals("Item is not in the catalog", exception.getMessage());
     }
 
     @Test
+    public void catalogIsImmutable() {
+        Map<String, Double> catalog = Store.catalog();
+        assertThrows(UnsupportedOperationException.class,
+                () -> catalog.put("hat", 10.0));
+    }
+
+    @Test
     public void cannotAddZeroItems() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> cart.addItem("apple", 0));
+                () -> Store.addItem(CUSTOMER_ID, "apple", 0));
         assertEquals("Quantity must be between 1 and 100", exception.getMessage());
     }
 
     @Test
     public void cannotAddNegativeItems() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> cart.addItem("apple", -1));
+                () -> Store.addItem(CUSTOMER_ID, "apple", -1));
         assertEquals("Quantity must be between 1 and 100", exception.getMessage());
     }
 
     @Test
     public void cannotAddMoreThan100Items() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> cart.addItem("apple", 101));
+                () -> Store.addItem(CUSTOMER_ID, "apple", 101));
         assertEquals("Quantity must be between 1 and 100", exception.getMessage());
     }
 
     @Test
     public void cannotRemoveZeroItems() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        Store.addItem(CUSTOMER_ID, "apple", 1);
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> cart.removeItem("apple", 0));
+                () -> Store.removeItem(CUSTOMER_ID, "apple", 0));
         assertEquals("Quantity must be greater than 0", exception.getMessage());
     }
 
     @Test
     public void cannotRemoveNegativeItems() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        Store.addItem(CUSTOMER_ID, "apple", 1);
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> cart.removeItem("apple", -1));
+                () -> Store.removeItem(CUSTOMER_ID, "apple", -1));
         assertEquals("Quantity must be greater than 0", exception.getMessage());
     }
 
     @Test
     public void cannotIncrementOver100() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        Store.addItem(CUSTOMER_ID, "apple", 100);
         Throwable exception = assertThrows(IllegalArgumentException.class, () -> {
-            cart.addItem("apple", 100);
-            cart.addItem("apple", 1);
+            Store.addItem(CUSTOMER_ID, "apple", 1);
         });
         assertEquals("Quantity must be between 1 and 100", exception.getMessage());
     }
 
     @Test
-    public void testRemoveSingleItem() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-        cart.addItem("apple", 1);
-        cart.removeItem("apple", 1);
-        assertEquals(0, cart.size());
-    }
-
-    @Test
-    public void testRemoveMultipleItems() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-        cart.addItem("apple", 1);
-        cart.addItem("apple", 1);
-        cart.removeItem("apple", 2);
-        assertEquals(0, cart.size());
-    }
-
-    @Test
     public void itemNotInCartCannotBeRemoved() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> cart.removeItem("apple", 1));
+                () -> Store.removeItem(CUSTOMER_ID, "apple", 1));
         assertEquals("Item does not exist in cart", exception.getMessage());
     }
 
     @Test
     public void cannotRemoveMoreItemsThanInCart() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
+        Store.addItem(CUSTOMER_ID, "apple", 1);
         Throwable exception = assertThrows(IllegalArgumentException.class, () -> {
-            cart.addItem("apple", 1);
-            cart.removeItem("apple", 2);
+            Store.removeItem(CUSTOMER_ID, "apple", 2);
         });
         assertEquals("Quantity exceeds the quantity of the item in the cart. You have 1.", exception.getMessage());
     }
 
     @Test
     public void totalCostEmptyCart() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-        assertEquals(0, cart.totalCost());
+        assertEquals(0, Store.totalCost(CUSTOMER_ID));
     }
 
     @Test
     public void totalCostSingleItem() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-        cart.addItem("apple", 1);
-        assertEquals(0.5, cart.totalCost());
+        Store.addItem(CUSTOMER_ID, "apple", 1);
+        assertEquals(0.5, Store.totalCost(CUSTOMER_ID));
     }
 
     @Test
     public void totalCostDuplicateItem() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-        cart.addItem("apple", 5);
-        assertEquals(2.5, cart.totalCost());
+        Store.addItem(CUSTOMER_ID, "apple", 5);
+        assertEquals(2.5, Store.totalCost(CUSTOMER_ID));
     }
 
     @Test
     public void totalCostMultipleItems() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-        cart.addItem("laptop", 1);
-        cart.addItem("book", 1);
-        cart.addItem("banana", 1);
-        cart.addItem("orange", 1);
-        assertEquals(1020.7, cart.totalCost());
+        Store.addItem(CUSTOMER_ID, "laptop", 1);
+        Store.addItem(CUSTOMER_ID, "book", 1);
+        Store.addItem(CUSTOMER_ID, "banana", 1);
+        Store.addItem(CUSTOMER_ID, "orange", 1);
+        assertEquals(1020.7, Store.totalCost(CUSTOMER_ID));
     }
 
     @Test
     public void totalCostMultipleDuplicateItems() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-        cart.addItem("laptop", 1);
-        cart.addItem("book", 3);
-        cart.addItem("banana", 1);
-        cart.addItem("banana", 1);
-        cart.addItem("orange", 2);
-        assertEquals(1061.4, cart.totalCost());
+        Store.addItem(CUSTOMER_ID, "laptop", 1);
+        Store.addItem(CUSTOMER_ID, "book", 3);
+        Store.addItem(CUSTOMER_ID, "banana", 1);
+        Store.addItem(CUSTOMER_ID, "banana", 1);
+        Store.addItem(CUSTOMER_ID, "orange", 2);
+        assertEquals(1061.4, Store.totalCost(CUSTOMER_ID));
     }
 
     @Test
     public void totalCostUpperBound() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> cart.addItem("laptop", 3));
+                () -> Store.addItem(CUSTOMER_ID, "laptop", 3));
         assertEquals("Total cost of cart cannot exceed 2500.00", exception.getMessage());
-        assertEquals(0, cart.size());
+        assertEquals(0, Store.cartSize(CUSTOMER_ID));
     }
 
     @Test
     public void totalCostUpperBoundIncremental() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-        cart.addItem("laptop", 2);
+        Store.addItem(CUSTOMER_ID, "laptop", 2);
 
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> cart.addItem("laptop", 1));
+                () -> Store.addItem(CUSTOMER_ID, "laptop", 1));
         assertEquals("Total cost of cart cannot exceed 2500.00", exception.getMessage());
-        assertEquals(2, cart.size());
+        assertEquals(2, Store.cartSize(CUSTOMER_ID));
     }
 
     @Test
     public void cartSizeUpperBound() {
-        ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-        cart.addItem("apple", 100);
-        cart.addItem("orange", 100);
+        Store.addItem(CUSTOMER_ID, "apple", 100);
+        Store.addItem(CUSTOMER_ID, "orange", 100);
         Throwable exception = assertThrows(IllegalArgumentException.class,
-                () -> cart.addItem("banana", 1));
+                () -> Store.addItem(CUSTOMER_ID, "banana", 1));
         assertEquals("Total number of items cannot exceed 200", exception.getMessage());
+    }
+
+    @Test
+    public void customersHaveSeparateCarts() {
+        String otherCustomerID = "ZBC12345EF-A";
+        Store.createCart(otherCustomerID);
+        Store.addItem(CUSTOMER_ID, "apple", 5);
+        Store.addItem(otherCustomerID, "book", 2);
+
+        assertTrue(Map.of("apple", 5).equals(Store.items(CUSTOMER_ID)));
+        assertTrue(Map.of("book", 2).equals(Store.items(otherCustomerID)));
     }
 }
