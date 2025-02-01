@@ -916,46 +916,41 @@ public class ShoppingCartTests {
         assertEquals("Quantity exceeds the quantity of the item in the cart. You have 1.", exception.getMessage());
     }
 
-    // @Test
-    // public void totalCostEmptyCart() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     assertEquals(0, cart.totalCost());
-    // }
+    @Test
+    public void totalCostEmptyCart() {
+        assertEquals(0, Store.totalCost(CUSTOMER_ID));
+    }
 
-    // @Test
-    // public void totalCostSingleItem() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     cart.addItem("apple", 1);
-    //     assertEquals(0.5, cart.totalCost());
-    // }
+    @Test
+    public void totalCostSingleItem() {
+        Store.addItem(CUSTOMER_ID, "apple", 1);
+        assertEquals(0.5, Store.totalCost(CUSTOMER_ID));
+    }
 
-    // @Test
-    // public void totalCostDuplicateItem() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     cart.addItem("apple", 5);
-    //     assertEquals(2.5, cart.totalCost());
-    // }
+    @Test
+    public void totalCostDuplicateItem() {
+        Store.addItem(CUSTOMER_ID, "apple", 5);
+        assertEquals(2.5, Store.totalCost(CUSTOMER_ID));
+    }
 
-    // @Test
-    // public void totalCostMultipleItems() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     cart.addItem("laptop", 1);
-    //     cart.addItem("book", 1);
-    //     cart.addItem("banana", 1);
-    //     cart.addItem("orange", 1);
-    //     assertEquals(1020.7, cart.totalCost());
-    // }
+    @Test
+    public void totalCostMultipleItems() {
+        Store.addItem(CUSTOMER_ID, "laptop", 1);
+        Store.addItem(CUSTOMER_ID, "book", 1);
+        Store.addItem(CUSTOMER_ID, "banana", 1);
+        Store.addItem(CUSTOMER_ID, "orange", 1);
+        assertEquals(1020.7, Store.totalCost(CUSTOMER_ID));
+    }
 
-    // @Test
-    // public void totalCostMultipleDuplicateItems() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     cart.addItem("laptop", 1);
-    //     cart.addItem("book", 3);
-    //     cart.addItem("banana", 1);
-    //     cart.addItem("banana", 1);
-    //     cart.addItem("orange", 2);
-    //     assertEquals(1061.4, cart.totalCost());
-    // }
+    @Test
+    public void totalCostMultipleDuplicateItems() {
+        Store.addItem(CUSTOMER_ID, "laptop", 1);
+        Store.addItem(CUSTOMER_ID, "book", 3);
+        Store.addItem(CUSTOMER_ID, "banana", 1);
+        Store.addItem(CUSTOMER_ID, "banana", 1);
+        Store.addItem(CUSTOMER_ID, "orange", 2);
+        assertEquals(1061.4, Store.totalCost(CUSTOMER_ID));
+    }
 
     // @Test
     // public void totalCostUpperBound() {
