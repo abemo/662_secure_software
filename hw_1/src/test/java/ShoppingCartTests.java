@@ -746,7 +746,42 @@ public class ShoppingCartTests {
         assertEquals("Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>",
                 exception.getMessage());
     }
-    
+
+    @Test
+    public void itemsNoCustomerIDFound() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items("ZYC12345EF-A"));
+        assertEquals("No cart exists for the customer ID ZYC12345EF-A", exception.getMessage());
+    }
+
+    @Test
+    public void addItemNoCustomerIDFound() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem("ZYC12345EF-A", "apple", 1));
+        assertEquals("No cart exists for the customer ID ZYC12345EF-A", exception.getMessage());
+    }
+
+    @Test
+    public void removeItemNoCustomerIDFound() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem("ZYC12345EF-A", "apple", 1));
+        assertEquals("No cart exists for the customer ID ZYC12345EF-A", exception.getMessage());
+    }
+
+    @Test
+    public void totalCostNoCustomerIDFound() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost("ZYC12345EF-A"));
+        assertEquals("No cart exists for the customer ID ZYC12345EF-A", exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeNoCustomerIDFound() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize("ZYC12345EF-A"));
+        assertEquals("No cart exists for the customer ID ZYC12345EF-A", exception.getMessage());
+    }
+
     @Test
     public void createCartCustomerID_allowsQ() {
         Store.createCart("ABC12345EF-Q");
