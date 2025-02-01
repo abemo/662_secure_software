@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class Store {
-    private static Store instance = new Store();
     private static final Pattern CUSTOMER_ID_PATTERN = Pattern.compile("^\\p{L}{3}[\\d]{5}[a-zA-Z]{2}[-][AQ]$");
     private static final int MAX_QUANTITY = 100;
     private static final int MAX_ITEM_NAME_LENGTH = 50;
@@ -20,19 +19,9 @@ public final class Store {
     private static final Map<String, Double> PRICES = Map.of("apple", 0.5, "banana", 0.3, "orange", 0.4, "laptop",
             1000.0, "book", 20.0);
 
-    private static Map<String, ShoppingCart> carts;
+    private static Map<String, ShoppingCart> carts = new HashMap<>();
 
-    private Store() {
-        carts = new HashMap<>();
-    }
-
-    public static Store Store() {
-        if (instance == null) {
-            instance = new Store();
-        }
-
-        return instance;
-    }
+    private Store() {}
 
     public static Map<String, Double> catalog() {
         return Collections.unmodifiableMap(new HashMap<>(PRICES));
