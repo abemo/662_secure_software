@@ -39,9 +39,37 @@ public class ShoppingCartTests {
     }
 
     @Test
+    public void itemsNullCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items(null));
+        assertEquals("Customer ID cannot be null", exception.getMessage());
+    }
+
+    @Test
     public void addItemNullCustomerID() {
         Throwable exception = assertThrows(IllegalArgumentException.class,
                 () -> Store.addItem(null, "apple", 1));
+        assertEquals("Customer ID cannot be null", exception.getMessage());
+    }
+    
+    @Test
+    public void removeItemNullCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem(null, "apple", 1));
+        assertEquals("Customer ID cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void totalCostNullCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost(null));
+        assertEquals("Customer ID cannot be null", exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeNullCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize(null));
         assertEquals("Customer ID cannot be null", exception.getMessage());
     }
 
