@@ -98,7 +98,7 @@ public final class Store {
             this.CART_ID = UUID.randomUUID();
             this.CUSTOMER_ID = customerID;
             this.items = new HashMap<>();
-        } // TODO: customer has 1 cart
+        }
 
         // Creates a shopping cart with a deep copy of items
         private ShoppingCart(UUID cartID, String customerID, Map<String, Integer> items) {
