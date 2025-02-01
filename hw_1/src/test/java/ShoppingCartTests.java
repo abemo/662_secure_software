@@ -978,4 +978,15 @@ public class ShoppingCartTests {
                 () -> Store.addItem(CUSTOMER_ID, "banana", 1));
         assertEquals("Total number of items cannot exceed 200", exception.getMessage());
     }
+
+    @Test
+    public void customersHaveSeparateCarts() {
+        String otherCustomerID = "ZBC12345EF-A";
+        Store.createCart(otherCustomerID);
+        Store.addItem(CUSTOMER_ID, "apple", 5);
+        Store.addItem(otherCustomerID, "book", 2);
+
+        assertTrue(Map.of("apple", 5).equals(Store.items(CUSTOMER_ID)));
+        assertTrue(Map.of("book", 2).equals(Store.items(otherCustomerID)));
+    }
 }
