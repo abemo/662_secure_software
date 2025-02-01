@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.*;
 
 public class ShoppingCartTests {
     private static final String CUSTOMER_ID = "ABC12345DE-A";
@@ -17,6 +18,7 @@ public class ShoppingCartTests {
     @BeforeEach
     public void clearCart() {
         Store.clearCart(CUSTOMER_ID);
+        assertEquals(0, Store.cartSize(CUSTOMER_ID));
     }
 
     @Test
@@ -767,30 +769,40 @@ public class ShoppingCartTests {
         assertEquals(0, Store.totalCost("ABC12345EF-Q"));
     }
 
-    // @Test
-    // public void addItemDuplicateItem() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     cart.addItem("apple", 5);
-    //     assertEquals(5, cart.items().get("apple"));
-    //     assertEquals(5, cart.size());
-    // }
+    @Test
+    public void addItemDuplicateItem() {
+        Store.addItem(CUSTOMER_ID, "apple", 5);
+        assertEquals(5, Store.cartSize(CUSTOMER_ID));
+        Map<String, Integer> expectedItems = Map.of("apple", 5);
+        assertTrue(expectedItems.equals(Store.items(CUSTOMER_ID)));
+    }
 
-    // @Test
-    // public void addMultipleItems() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     cart.addItem("apple", 5);
-    //     cart.addItem("book", 2);
-    //     assertEquals(7, cart.size());
-    // }
+    @Test
+    public void addItemMultipleItems() {
+        Store.addItem(CUSTOMER_ID, "apple", 5);
+        Store.addItem(CUSTOMER_ID, "book", 2);
+        assertEquals(7, Store.cartSize(CUSTOMER_ID));
+        Map<String, Integer> expectedItems = Map.of("apple", 5, "book", 2);
+        assertTrue(expectedItems.equals(Store.items(CUSTOMER_ID)));
+    }
 
-    // @Test
-    // public void removeItemRemovesItem() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     cart.addItem("apple", 5);
-    //     cart.removeItem("apple", 3);
-    //     assertEquals(2, cart.items().get("apple"));
-    //     assertEquals(2, cart.size());
-    // }
+    @Test
+    public void testRemoveSomeOfItem() {
+        Store.addItem(CUSTOMER_ID, "apple", 5);
+        Store.removeItem(CUSTOMER_ID, "apple", 3);
+        assertEquals(2, Store.cartSize(CUSTOMER_ID));
+        Map<String, Integer> expectedItems = Map.of("apple", 2);
+        assertTrue(expectedItems.equals(Store.items(CUSTOMER_ID)));
+    }
+
+    @Test
+    public void testRemoveItem() {
+        Store.addItem(CUSTOMER_ID, "apple", 5);
+        Store.removeItem(CUSTOMER_ID, "apple", 5);
+        assertEquals(0, Store.cartSize(CUSTOMER_ID));
+        Map<String, Integer> expectedItems = new HashMap<>();
+        assertTrue(expectedItems.equals(Store.items(CUSTOMER_ID)));
+    }
 
     // @Test
     // public void itemNameNoSymbols() {
