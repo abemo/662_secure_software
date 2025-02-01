@@ -68,6 +68,11 @@ public final class Store {
         return carts.get(customerID).size();
     }
 
+    public static void clearCart(String customerID) {
+        ensureCustomerExists(customerID);
+        carts.get(customerID).clearCart();
+    }
+
     private static void ensureCustomerExists(String customerID) {
         validateCustomerID(customerID);
 
@@ -144,6 +149,10 @@ public final class Store {
             } else {
                 items.put(itemName, newQuantity);
             }
+        }
+
+        private void clearCart() {
+            this.items.clear();
         }
 
         private double totalCost() {

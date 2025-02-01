@@ -3,6 +3,7 @@ package hw_1;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ShoppingCartTests {
@@ -11,6 +12,11 @@ public class ShoppingCartTests {
     @BeforeAll
     public static void initializeStore() {
         Store.createCart(CUSTOMER_ID);
+    }
+
+    @BeforeEach
+    public void clearCart() {
+        Store.clearCart(CUSTOMER_ID);
     }
 
     @Test
@@ -762,7 +768,7 @@ public class ShoppingCartTests {
     }
 
     // @Test
-    // public void addItemAddsItem() {
+    // public void addItemDuplicateItem() {
     //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
     //     cart.addItem("apple", 5);
     //     assertEquals(5, cart.items().get("apple"));
