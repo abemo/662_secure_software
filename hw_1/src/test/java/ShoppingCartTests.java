@@ -836,13 +836,12 @@ public class ShoppingCartTests {
     //     assertEquals("Item name is too long", exception.getMessage());
     // }
 
-    // @Test
-    // public void itemNameTooShort() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     Throwable exception = assertThrows(IllegalArgumentException.class,
-    //             () -> cart.addItem("", 99));
-    //     assertEquals("Item name cannot be empty", exception.getMessage());
-    // }
+    @Test
+    public void catalogIsImmutable() {
+        Map<String, Double> catalog = Store.catalog();
+        assertThrows(UnsupportedOperationException.class,
+                () -> catalog.put("hat", 10.0));
+    }
 
     // @Test
     // public void itemMustBeInCatalog() {

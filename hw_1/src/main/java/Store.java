@@ -34,6 +34,10 @@ public final class Store {
         return instance;
     }
 
+    public static Map<String, Double> catalog() {
+        return Collections.unmodifiableMap(new HashMap<>(PRICES));
+    }
+
     public static void createCart(String customerID) {
         validateCustomerID(customerID);
         if (carts.containsKey(customerID)) {
