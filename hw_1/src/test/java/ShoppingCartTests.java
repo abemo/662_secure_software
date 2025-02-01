@@ -952,25 +952,23 @@ public class ShoppingCartTests {
         assertEquals(1061.4, Store.totalCost(CUSTOMER_ID));
     }
 
-    // @Test
-    // public void totalCostUpperBound() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     Throwable exception = assertThrows(IllegalArgumentException.class,
-    //             () -> cart.addItem("laptop", 3));
-    //     assertEquals("Total cost of cart cannot exceed 2500.00", exception.getMessage());
-    //     assertEquals(0, cart.size());
-    // }
+    @Test
+    public void totalCostUpperBound() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem(CUSTOMER_ID, "laptop", 3));
+        assertEquals("Total cost of cart cannot exceed 2500.00", exception.getMessage());
+        assertEquals(0, Store.cartSize(CUSTOMER_ID));
+    }
 
-    // @Test
-    // public void totalCostUpperBoundIncremental() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     cart.addItem("laptop", 2);
+    @Test
+    public void totalCostUpperBoundIncremental() {
+        Store.addItem(CUSTOMER_ID, "laptop", 2);
 
-    //     Throwable exception = assertThrows(IllegalArgumentException.class,
-    //             () -> cart.addItem("laptop", 1));
-    //     assertEquals("Total cost of cart cannot exceed 2500.00", exception.getMessage());
-    //     assertEquals(2, cart.size());
-    // }
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem(CUSTOMER_ID, "laptop", 1));
+        assertEquals("Total cost of cart cannot exceed 2500.00", exception.getMessage());
+        assertEquals(2, Store.cartSize(CUSTOMER_ID));
+    }
 
     // @Test
     // public void cartSizeUpperBound() {
