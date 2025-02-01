@@ -812,29 +812,40 @@ public class ShoppingCartTests {
                 () -> items.put("book", 2));
     }
 
-    // @Test
-    // public void itemNameNoSymbols() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     Throwable exception = assertThrows(IllegalArgumentException.class,
-    //             () -> cart.addItem("$$$", 99));
-    //     assertEquals("Item names must only contain letters, numbers, and spaces.", exception.getMessage());
-    // }
+    @Test
+    public void itemNameNoSymbols() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem(CUSTOMER_ID, "$$$", 99));
+        assertEquals("Item names must only contain letters, numbers, and spaces", exception.getMessage());
+    }
 
-    // @Test
-    // public void itemNameOtherLanguages() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     Throwable exception = assertThrows(IllegalArgumentException.class,
-    //             () -> cart.addItem("Hello 你好 привет مرحبًا", 99));
-    //     assertEquals("Item names must only contain letters, numbers, and spaces.", exception.getMessage());
-    // }
+    @Test
+    public void itemNameOtherLanguages() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem(CUSTOMER_ID, "Hello 你好 привет مرحبًا", 99));
+        assertEquals("Item names must only contain letters, numbers, and spaces", exception.getMessage());
+    }
 
-    // @Test
-    // public void itemNameTooLong() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     Throwable exception = assertThrows(IllegalArgumentException.class,
-    //             () -> cart.addItem("0123456789 0123456789 0123456789 0123456789 0123456789", 99));
-    //     assertEquals("Item name is too long", exception.getMessage());
-    // }
+    @Test
+    public void itemNameTooLong() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem(CUSTOMER_ID, "0123456789 0123456789 0123456789 0123456789 0123456789", 99));
+        assertEquals("Item name cannot be more than 50 characters", exception.getMessage());
+    }
+
+    @Test
+    public void itemNameEmpty() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem(CUSTOMER_ID, "", 99));
+        assertEquals("Item name cannot be empty", exception.getMessage());
+    }
+
+    @Test
+    public void itemMustBeInCatalog() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem(CUSTOMER_ID, "skibidi toilet", 69));
+        assertEquals("Item is not in the catalog", exception.getMessage());
+    }
 
     @Test
     public void catalogIsImmutable() {
@@ -842,14 +853,6 @@ public class ShoppingCartTests {
         assertThrows(UnsupportedOperationException.class,
                 () -> catalog.put("hat", 10.0));
     }
-
-    // @Test
-    // public void itemMustBeInCatalog() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     Throwable exception = assertThrows(IllegalArgumentException.class,
-    //             () -> cart.addItem("skibidi toilet", 69));
-    //     assertEquals("Item is not in the catalog", exception.getMessage());
-    // }
 
     // @Test
     // public void cannotAddZeroItems() {

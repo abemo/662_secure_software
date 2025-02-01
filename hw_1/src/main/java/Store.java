@@ -184,13 +184,14 @@ public final class Store {
 
         private void validateItemName(String itemName) {
             if (itemName.length() > MAX_ITEM_NAME_LENGTH) {
-                throw new IllegalArgumentException("Item name is too long");
+                throw new IllegalArgumentException(
+                        String.format("Item name cannot be more than %d characters", MAX_ITEM_NAME_LENGTH));
             }
             if (itemName.isBlank()) {
                 throw new IllegalArgumentException("Item name cannot be empty");
             }
             if (!ITEM_NAME_PATTERN.matcher(itemName).matches()) {
-                throw new IllegalArgumentException("Item names must only contain letters, numbers, and spaces.");
+                throw new IllegalArgumentException("Item names must only contain letters, numbers, and spaces");
             }
             if (!CATALOG.contains(itemName.toLowerCase())) {
                 throw new IllegalArgumentException("Item is not in the catalog");
