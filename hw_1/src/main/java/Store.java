@@ -116,10 +116,6 @@ public final class Store {
             this.items = new HashMap<>(items);
         }
 
-        private ShoppingCart deepCopy() {
-            return new ShoppingCart(this.CART_ID, this.CUSTOMER_ID, this.items);
-        }
-
         private Map<String, Integer> items() {
             return Collections.unmodifiableMap(new HashMap<>(items));
         }
