@@ -109,13 +109,6 @@ public final class Store {
             this.items = new HashMap<>();
         }
 
-        // Creates a shopping cart with a deep copy of items
-        private ShoppingCart(UUID cartID, String customerID, Map<String, Integer> items) {
-            this.CART_ID = cartID;
-            this.CUSTOMER_ID = customerID;
-            this.items = new HashMap<>(items);
-        }
-
         private Map<String, Integer> items() {
             return Collections.unmodifiableMap(new HashMap<>(items));
         }
