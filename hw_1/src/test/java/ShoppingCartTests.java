@@ -970,13 +970,12 @@ public class ShoppingCartTests {
         assertEquals(2, Store.cartSize(CUSTOMER_ID));
     }
 
-    // @Test
-    // public void cartSizeUpperBound() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     cart.addItem("apple", 100);
-    //     cart.addItem("orange", 100);
-    //     Throwable exception = assertThrows(IllegalArgumentException.class,
-    //             () -> cart.addItem("banana", 1));
-    //     assertEquals("Total number of items cannot exceed 200", exception.getMessage());
-    // }
+    @Test
+    public void cartSizeUpperBound() {
+        Store.addItem(CUSTOMER_ID, "apple", 100);
+        Store.addItem(CUSTOMER_ID, "orange", 100);
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem(CUSTOMER_ID, "banana", 1));
+        assertEquals("Total number of items cannot exceed 200", exception.getMessage());
+    }
 }
