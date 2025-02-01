@@ -804,6 +804,14 @@ public class ShoppingCartTests {
         assertTrue(expectedItems.equals(Store.items(CUSTOMER_ID)));
     }
 
+    @Test
+    public void itemsAreImmutable() {
+        Store.addItem(CUSTOMER_ID, "apple", 5);
+        Map<String, Integer> items = Store.items(CUSTOMER_ID);
+        assertThrows(UnsupportedOperationException.class,
+                () -> items.put("book", 2));
+    }
+
     // @Test
     // public void itemNameNoSymbols() {
     //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
