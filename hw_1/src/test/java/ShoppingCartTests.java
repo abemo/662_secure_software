@@ -854,90 +854,67 @@ public class ShoppingCartTests {
                 () -> catalog.put("hat", 10.0));
     }
 
-    // @Test
-    // public void cannotAddZeroItems() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     Throwable exception = assertThrows(IllegalArgumentException.class,
-    //             () -> cart.addItem("apple", 0));
-    //     assertEquals("Quantity must be between 1 and 100", exception.getMessage());
-    // }
+    @Test
+    public void cannotAddZeroItems() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem(CUSTOMER_ID, "apple", 0));
+        assertEquals("Quantity must be between 1 and 100", exception.getMessage());
+    }
 
-    // @Test
-    // public void cannotAddNegativeItems() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     Throwable exception = assertThrows(IllegalArgumentException.class,
-    //             () -> cart.addItem("apple", -1));
-    //     assertEquals("Quantity must be between 1 and 100", exception.getMessage());
-    // }
+    @Test
+    public void cannotAddNegativeItems() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem(CUSTOMER_ID, "apple", -1));
+        assertEquals("Quantity must be between 1 and 100", exception.getMessage());
+    }
 
-    // @Test
-    // public void cannotAddMoreThan100Items() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     Throwable exception = assertThrows(IllegalArgumentException.class,
-    //             () -> cart.addItem("apple", 101));
-    //     assertEquals("Quantity must be between 1 and 100", exception.getMessage());
-    // }
+    @Test
+    public void cannotAddMoreThan100Items() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem(CUSTOMER_ID, "apple", 101));
+        assertEquals("Quantity must be between 1 and 100", exception.getMessage());
+    }
 
-    // @Test
-    // public void cannotRemoveZeroItems() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     Throwable exception = assertThrows(IllegalArgumentException.class,
-    //             () -> cart.removeItem("apple", 0));
-    //     assertEquals("Quantity must be greater than 0", exception.getMessage());
-    // }
+    @Test
+    public void cannotRemoveZeroItems() {
+        Store.addItem(CUSTOMER_ID, "apple", 1);
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem(CUSTOMER_ID, "apple", 0));
+        assertEquals("Quantity must be greater than 0", exception.getMessage());
+    }
 
-    // @Test
-    // public void cannotRemoveNegativeItems() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     Throwable exception = assertThrows(IllegalArgumentException.class,
-    //             () -> cart.removeItem("apple", -1));
-    //     assertEquals("Quantity must be greater than 0", exception.getMessage());
-    // }
+    @Test
+    public void cannotRemoveNegativeItems() {
+        Store.addItem(CUSTOMER_ID, "apple", 1);
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem(CUSTOMER_ID, "apple", -1));
+        assertEquals("Quantity must be greater than 0", exception.getMessage());
+    }
 
-    // @Test
-    // public void cannotIncrementOver100() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     Throwable exception = assertThrows(IllegalArgumentException.class, () -> {
-    //         cart.addItem("apple", 100);
-    //         cart.addItem("apple", 1);
-    //     });
-    //     assertEquals("Quantity must be between 1 and 100", exception.getMessage());
-    // }
+    @Test
+    public void cannotIncrementOver100() {
+        Store.addItem(CUSTOMER_ID, "apple", 100);
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> {
+            Store.addItem(CUSTOMER_ID, "apple", 1);
+        });
+        assertEquals("Quantity must be between 1 and 100", exception.getMessage());
+    }
 
-    // @Test
-    // public void testRemoveSingleItem() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     cart.addItem("apple", 1);
-    //     cart.removeItem("apple", 1);
-    //     assertEquals(0, cart.size());
-    // }
+    @Test
+    public void itemNotInCartCannotBeRemoved() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem(CUSTOMER_ID, "apple", 1));
+        assertEquals("Item does not exist in cart", exception.getMessage());
+    }
 
-    // @Test
-    // public void testRemoveMultipleItems() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     cart.addItem("apple", 1);
-    //     cart.addItem("apple", 1);
-    //     cart.removeItem("apple", 2);
-    //     assertEquals(0, cart.size());
-    // }
-
-    // @Test
-    // public void itemNotInCartCannotBeRemoved() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     Throwable exception = assertThrows(IllegalArgumentException.class,
-    //             () -> cart.removeItem("apple", 1));
-    //     assertEquals("Item does not exist in cart", exception.getMessage());
-    // }
-
-    // @Test
-    // public void cannotRemoveMoreItemsThanInCart() {
-    //     ShoppingCart cart = new ShoppingCart("ABC12345DE-A");
-    //     Throwable exception = assertThrows(IllegalArgumentException.class, () -> {
-    //         cart.addItem("apple", 1);
-    //         cart.removeItem("apple", 2);
-    //     });
-    //     assertEquals("Quantity exceeds the quantity of the item in the cart. You have 1.", exception.getMessage());
-    // }
+    @Test
+    public void cannotRemoveMoreItemsThanInCart() {
+        Store.addItem(CUSTOMER_ID, "apple", 1);
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> {
+            Store.removeItem(CUSTOMER_ID, "apple", 2);
+        });
+        assertEquals("Quantity exceeds the quantity of the item in the cart. You have 1.", exception.getMessage());
+    }
 
     // @Test
     // public void totalCostEmptyCart() {
