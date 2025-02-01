@@ -84,7 +84,8 @@ public final class Store {
             throw new IllegalArgumentException("Customer ID cannot be empty");
         }
         if (!CUSTOMER_ID_PATTERN.matcher(customerID).matches()) {
-            throw new IllegalArgumentException("Invalid customer ID format");
+            throw new IllegalArgumentException(
+                    "Customer ID must have the following format: <3 letters><5 numbers><2 letters>-<A or Q>");
         }
     }
 
