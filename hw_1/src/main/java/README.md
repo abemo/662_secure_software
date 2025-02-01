@@ -17,7 +17,7 @@ Specification
 - [❌] Require customer ids to have the following form: 3 letters, 5 numbers, 2 letters, a dash, and finally an A or a Q.
   - update letter to allow any unicode letter
 - [✅] Ensure negative quantities for any item in the cart can never appear.
-- [❌] Check for upper bounds on every quantity as well
+- [✅] Check for upper bounds on every quantity as well
 - [✅] Make sure items added to the cart are in some kind of catalog, and are not just made up (hack in) by an adversary.
 - [✅] Ensure item names are length-bounded and the characters in the names restricted.
   - allow unicode letters in item names
