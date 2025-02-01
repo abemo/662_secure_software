@@ -73,6 +73,48 @@ public class ShoppingCartTests {
         assertEquals("Customer ID cannot be null", exception.getMessage());
     }
 
+    @Test
+    public void createCartEmptyCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.createCart(""));
+        assertEquals("Customer ID cannot be empty", exception.getMessage());
+    }
+
+    @Test
+    public void itemsEmptyCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.items(""));
+        assertEquals("Customer ID cannot be empty", exception.getMessage());
+    }
+
+    @Test
+    public void addItemEmptyCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.addItem("", "apple", 1));
+        assertEquals("Customer ID cannot be empty", exception.getMessage());
+    }
+    
+    @Test
+    public void removeItemEmptyCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.removeItem("", "apple", 1));
+        assertEquals("Customer ID cannot be empty", exception.getMessage());
+    }
+
+    @Test
+    public void totalCostEmptyCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.totalCost(""));
+        assertEquals("Customer ID cannot be empty", exception.getMessage());
+    }
+
+    @Test
+    public void cartSizeEmptyCustomerID() {
+        Throwable exception = assertThrows(IllegalArgumentException.class,
+                () -> Store.cartSize(""));
+        assertEquals("Customer ID cannot be empty", exception.getMessage());
+    }
+
     // @Test
     // public void customerIdCannotBeEmpty() {
     //     Throwable exception = assertThrows(IllegalArgumentException.class,
