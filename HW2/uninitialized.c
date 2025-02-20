@@ -9,7 +9,7 @@ Reading uninitialized memory can result in undefined behavior.  Don't do that.
 #include <stdio.h>
 #include <stdlib.h>
 
-// this is an example of a program that reads uninitialized memory
+// this is an example of a non-compliant program that reads uninitialized memory
 void readUninitializedMemory() {
   int* ptr;
   printf("%d\n", *ptr);

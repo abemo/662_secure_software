@@ -9,7 +9,7 @@ Don't do that.
 
 #include <iostream>
 
-// this is an example of a program that accesses memory that has been freed
+// this is an example of a non-compliant program that accesses memory that has been freed
 void accessFreedMemory() {
   int* ptr = new int(5);
   delete ptr;

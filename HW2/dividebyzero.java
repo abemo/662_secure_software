@@ -15,7 +15,7 @@ public class divideByZero {
         return a / b;
     }
 
-    // a compliant version of the above method
+    // a compliant version of the above method which throws an exception if b is zero
     public static int divideSafe(int a, int b) {
         if (b == 0) {
             throw new IllegalArgumentException("b must be non-zero");
