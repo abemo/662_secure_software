@@ -24,6 +24,10 @@ public class intoverflow {
 
   // a compliant version of the above method
   public static int nextFibonacciSafe(int n) {
+    if (n < 0) {
+      throw new IllegalArgumentException("n must be non-negative");
+    }
+
     if (n == 0) {
       return 0;
     } else if (n == 1) {
