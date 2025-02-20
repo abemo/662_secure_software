@@ -9,7 +9,6 @@ occur. Incorrect size arguments, inadequate range checking, integer overflow, or
 result in the allocation of an inadequately sized buffer.
 */
 #include <stdio.h>
-// #include <string.h>
 #include <stdlib.h>
 
 struct Student {
