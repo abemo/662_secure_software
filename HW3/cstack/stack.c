@@ -17,7 +17,7 @@ StackResponse createStack() {
 }
 
 void destroyStack(Stack s) {
-  for (int i = 0; i < MAX_STACK_SIZE; i++) {
+  for (int i = 0; i < s->size; i++) {
     free(s->data[i]);
   }
   free(s);
