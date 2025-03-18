@@ -8,7 +8,6 @@
 
 enum class ResponseCode { // TODO should this class be nested within the STACK class?
   OutOfMemory,
-  StackFull,
   StackEmpty,
   Success
 };
@@ -36,6 +35,7 @@ public:
 private:
   std::unique_ptr<std::string[]> stack;
   size_t top;
+  size_t array_length;
 };
 
 #endif // STACK_H

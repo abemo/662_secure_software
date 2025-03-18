@@ -9,13 +9,19 @@ StringResponse::StringResponse(const std::string& value, ResponseCode code)
 
 StringResponse::~StringResponse() {}
 
-Stack::Stack() : stack(std::make_unique<std::string[]>(MAX_STACK_SIZE)), top(0) {}
+Stack::Stack() : stack(std::make_unique<std::string[]>(MAX_STACK_SIZE)), top(0), array_length(MAX_STACK_SIZE) {}
 
 Stack::~Stack() {}
 
 ResponseCode Stack::push(const std::string& value) {
   if (isFull()) {
-    return ResponseCode::StackFull;
+    array_length += MAX_STACK_SIZE;
+    std::unique_ptr<std::string[]> resized_stack = std::make_unique<std::string[]>(array_length);
+    for (int i = 0; i < top; i++) {
+      resized_stack[i] = stack[i];
+    }
+
+    stack.swap(resized_stack);
   }
   stack[top++] = value;
   return ResponseCode::Success;
@@ -40,7 +46,7 @@ bool Stack::isEmpty() const {
 }
 
 bool Stack::isFull() const {
-  return top == MAX_STACK_SIZE;
+  return top == array_length;
 }
 
 size_t Stack::size() const {
