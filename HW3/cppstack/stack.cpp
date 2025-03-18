@@ -17,7 +17,7 @@ ResponseCode Stack::push(const std::string& value) {
   if (isFull()) {
     array_length += MAX_STACK_SIZE;
     std::unique_ptr<std::string[]> resized_stack = std::make_unique<std::string[]>(array_length);
-    for (int i = 0; i < top; i++) {
+    for (size_t i = 0; i < top; i++) {
       resized_stack[i] = stack[i];
     }
 
