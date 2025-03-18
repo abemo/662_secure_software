@@ -44,18 +44,29 @@ int main() {
 
   rc = s.push("resize");
   assert(rc == ResponseCode::Success);
+  assert(!s.isFull());
   assert(s.size() == STARTING_STACK_SIZE + 1);
 
   pr = s.pop();
   assert(pr.code == ResponseCode::Success);
   assert(pr.value == "resize");
 
+  for (size_t i = s.size(); i < MAX_STACK_SIZE; i++) {
+    rc = s.push("junk");
+    assert(rc == ResponseCode::Success);
+  }
+  assert(s.isFull());
+  assert(s.size() == MAX_STACK_SIZE);
+
+  rc = s.push("overflow");
+  assert(rc == ResponseCode::StackFull);
+
   pr = s.pop();
   assert(pr.code == ResponseCode::Success);
   assert(pr.value == "junk");
-  assert(s.size() == STARTING_STACK_SIZE - 1);
+  assert(s.size() == MAX_STACK_SIZE - 1);
 
-  for (int i = STARTING_STACK_SIZE - 1; i > 0; i--) {
+  for (int i = MAX_STACK_SIZE - 1; i > 0; i--) {
     pr = s.pop();
     assert(pr.code == ResponseCode::Success);
   }

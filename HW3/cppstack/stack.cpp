@@ -14,6 +14,10 @@ Stack::Stack() : stack(std::make_unique<std::string[]>(STARTING_STACK_SIZE)), to
 Stack::~Stack() {}
 
 ResponseCode Stack::push(const std::string& value) {
+  if (top == MAX_STACK_SIZE) {
+    return ResponseCode::StackFull;
+  }
+
   if (isFull()) {
     array_length += STARTING_STACK_SIZE;
     std::unique_ptr<std::string[]> resized_stack = std::make_unique<std::string[]>(array_length);

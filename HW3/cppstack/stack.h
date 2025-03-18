@@ -4,12 +4,14 @@
 #include <memory>
 #include <string>
 
-#define STARTING_STACK_SIZE 65536
+#define STARTING_STACK_SIZE 128
+#define MAX_STACK_SIZE 65536
 
 enum class ResponseCode { // TODO should this class be nested within the STACK class?
   OutOfMemory,
   StackEmpty,
-  Success
+  Success,
+  StackFull
 };
 
 class StringResponse { // TODO should this class be nested within the STACK class?
