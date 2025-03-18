@@ -42,8 +42,13 @@ int main() {
   assert(s.isFull());
   assert(s.size() == MAX_STACK_SIZE);
 
-  rc = s.push("overflow");
-  assert(rc == ResponseCode::StackFull);
+  rc = s.push("resize");
+  assert(rc == ResponseCode::Success);
+  assert(s.size() == MAX_STACK_SIZE + 1);
+
+  pr = s.pop();
+  assert(pr.code == ResponseCode::Success);
+  assert(pr.value == "resize");
 
   pr = s.pop();
   assert(pr.code == ResponseCode::Success);
