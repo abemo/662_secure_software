@@ -9,13 +9,13 @@ StringResponse::StringResponse(const std::string& value, ResponseCode code)
 
 StringResponse::~StringResponse() {}
 
-Stack::Stack() : stack(std::make_unique<std::string[]>(MAX_STACK_SIZE)), top(0), array_length(MAX_STACK_SIZE) {}
+Stack::Stack() : stack(std::make_unique<std::string[]>(STARTING_STACK_SIZE)), top(0), array_length(STARTING_STACK_SIZE) {}
 
 Stack::~Stack() {}
 
 ResponseCode Stack::push(const std::string& value) {
   if (isFull()) {
-    array_length += MAX_STACK_SIZE;
+    array_length += STARTING_STACK_SIZE;
     std::unique_ptr<std::string[]> resized_stack = std::make_unique<std::string[]>(array_length);
     for (size_t i = 0; i < top; i++) {
       resized_stack[i] = stack[i];

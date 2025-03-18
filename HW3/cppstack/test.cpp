@@ -35,16 +35,16 @@ int main() {
   assert(pr.code == ResponseCode::Success);
   assert(pr.value == "baz");
 
-  for (int i = 5; i <= MAX_STACK_SIZE; i++) {
+  for (int i = 5; i <= STARTING_STACK_SIZE; i++) {
     rc = s.push("junk");
     assert(rc == ResponseCode::Success);
   }
   assert(s.isFull());
-  assert(s.size() == MAX_STACK_SIZE);
+  assert(s.size() == STARTING_STACK_SIZE);
 
   rc = s.push("resize");
   assert(rc == ResponseCode::Success);
-  assert(s.size() == MAX_STACK_SIZE + 1);
+  assert(s.size() == STARTING_STACK_SIZE + 1);
 
   pr = s.pop();
   assert(pr.code == ResponseCode::Success);
@@ -53,9 +53,9 @@ int main() {
   pr = s.pop();
   assert(pr.code == ResponseCode::Success);
   assert(pr.value == "junk");
-  assert(s.size() == MAX_STACK_SIZE - 1);
+  assert(s.size() == STARTING_STACK_SIZE - 1);
 
-  for (int i = MAX_STACK_SIZE - 1; i > 0; i--) {
+  for (int i = STARTING_STACK_SIZE - 1; i > 0; i--) {
     pr = s.pop();
     assert(pr.code == ResponseCode::Success);
   }

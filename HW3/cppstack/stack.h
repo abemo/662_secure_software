@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-#define MAX_STACK_SIZE 65536
+#define STARTING_STACK_SIZE 65536
 
 enum class ResponseCode { // TODO should this class be nested within the STACK class?
   OutOfMemory,
