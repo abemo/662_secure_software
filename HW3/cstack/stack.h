@@ -9,6 +9,7 @@ typedef enum {
   out_of_memory,
   stack_full,
   stack_empty,
+  invalid_argument,
   success
 } response_code;
 
@@ -18,7 +19,7 @@ typedef struct {
 } StackResponse;
 
 typedef struct {
-  const char* value;
+  char* value;
   response_code code;
 } StringResponse;
 
