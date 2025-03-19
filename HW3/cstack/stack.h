@@ -1,7 +1,7 @@
 // so far this just defines a NONexapandable stack of strings
 #include <stdbool.h>
 
-#define MAX_STACK_SIZE 65536
+#define MAX_STACK_SIZE 32
 
 typedef struct S* Stack;
 
@@ -23,10 +23,12 @@ typedef struct {
 } StringResponse;
 
 StackResponse createStack();
-void destroyStack(Stack s);
 response_code push(Stack s, char* value);
-StringResponse peek(Stack s);
 StringResponse pop(Stack s);
+StringResponse peek(Stack s);
+void destroyStack(Stack s);
 _Bool isEmpty(Stack s);
 _Bool isFull(Stack s);
+_Bool isFullyExpanded(Stack s);
 int size(Stack s);
+int top(Stack s);
