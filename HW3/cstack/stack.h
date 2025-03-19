@@ -1,4 +1,3 @@
-// so far this just defines a NONexapandable stack of strings
 #include <stdbool.h>
 
 #define MAX_STACK_SIZE 32
@@ -30,6 +29,5 @@ StringResponse peek(Stack s);
 void destroyStack(Stack s);
 _Bool isEmpty(Stack s);
 _Bool isFull(Stack s);
-_Bool isFullyExpanded(Stack s);
 int size(Stack s);
 int top(Stack s);
