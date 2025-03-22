@@ -7,14 +7,14 @@
 #define STARTING_STACK_SIZE 128
 #define MAX_STACK_SIZE 65536
 
-enum class ResponseCode { // TODO should this class be nested within the STACK class?
+enum class ResponseCode {
   OutOfMemory,
   StackEmpty,
   Success,
   StackFull
 };
 
-class StringResponse { // TODO should this class be nested within the STACK class?
+class StringResponse {
 public:
   StringResponse(const std::string& value, ResponseCode code);
   ~StringResponse();
@@ -24,7 +24,7 @@ public:
 
 class Stack {
 public:
-  Stack(); // TODO should the constructor be private? And then have a StackResponse class that creates the stack?
+  Stack();
   ~Stack();
 
   ResponseCode push(const std::string& value);

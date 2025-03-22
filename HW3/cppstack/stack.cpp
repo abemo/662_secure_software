@@ -1,5 +1,3 @@
-// TODO rule of 5, do we need a copy constructor, copy assignment operator, a move constructor and a move assignment operator?
-
 #include "stack.h"
 #include <memory>
 #include <string>
