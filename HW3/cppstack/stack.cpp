@@ -17,7 +17,11 @@ ResponseCode Stack::push(const std::string& value) {
   }
 
   if (isFull()) {
-    array_length += STARTING_STACK_SIZE;
+    // array_length += STARTING_STACK_SIZE;
+    array_length = array_length * 2;
+    if (array_length > MAX_STACK_SIZE) {
+      return ResponseCode::OutOfMemory;
+    }
     std::unique_ptr<std::string[]> resized_stack = std::make_unique<std::string[]>(array_length);
     for (size_t i = 0; i < top; i++) {
       resized_stack[i] = stack[i];
@@ -40,7 +44,19 @@ StringResponse Stack::pop() {
   if (isEmpty()) {
     return StringResponse("", ResponseCode::StackEmpty);
   }
-  return StringResponse(stack[--top], ResponseCode::Success);
+  
+  std::string value = stack[--top];
+
+  if (top > STARTING_STACK_SIZE && top == array_length / 4) {
+    array_length /= 2;
+    std::unique_ptr<std::string[]> resized_stack = std::make_unique<std::string[]>(array_length);
+    for (size_t i = 0; i < top; i++) {
+      resized_stack[i] = stack[i];
+    }
+    stack.swap(resized_stack);
+  }
+
+  return StringResponse(value, ResponseCode::Success);
 }
 
 bool Stack::isEmpty() const {
