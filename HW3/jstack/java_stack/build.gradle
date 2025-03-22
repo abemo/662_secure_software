@@ -34,7 +34,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'jstack.App'
+    mainClass = 'jstack.java_stack'
 }
 
 tasks.named('test') {
