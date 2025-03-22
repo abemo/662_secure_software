@@ -38,6 +38,13 @@ public class Stack {
         if (isEmpty()) {
             throw new IllegalStateException("Stack is empty");
         }
+        if (size > STARTING_STACK_SIZE && size < elements.length / 4) {
+            final String[] resizedStack = new String[elements.length / 2];
+            for (int i = 0; i < size; i++) {
+                resizedStack[i] = elements[i];
+            }
+            elements = resizedStack;
+        }
         return elements[--size];
     }
 
