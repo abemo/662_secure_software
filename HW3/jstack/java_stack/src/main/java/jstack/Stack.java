@@ -17,6 +17,10 @@ public class Stack {
         return size == 0;
     }
 
+    public int size() {
+        return size;
+    }
+
     public void push(String item) {
         if (size == MAX_CAPACITY) {
             throw new IllegalStateException("Stack is full");
