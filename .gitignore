@@ -4,7 +4,7 @@
 # Auto-generated files
 .vscode
 .DS_Store
-bin/
+# bin/
 
 # Prerequisites
 *.d
