@@ -1,9 +1,67 @@
-{% if error %}
-<p style="color: red">{{ error }}</p>
-{% endif %}
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f3e9ac;
+    color: #333;
+  }
+  .welcome-text {
+    text-align: center;
+    margin-top: 30px;
+  }
+  .welcome-text h1 {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 8em;
+  }
+  .welcome-text h2 {
+    font-family: 'Comic Sans MS', cursive;
+    font-size: 2.5em;
+  }
+  form {
+    background: #f3e9ac;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    margin: auto;
+  }
+    #login-button {
+    display: block;                  
+    margin: 20px auto 0;
+    width: 120px;                    
+    height: 120px;                   
+    border: none;
+    background: url('/static/closed-chest.webp') 
+               no-repeat center center;
+    background-size: contain;
+    cursor: pointer;
+    transition: background-image 0.3s ease;
+    color: transparent;
+    text-indent: -9999px;
+  }
+  #login-button:hover {
+    background-image: url('/static/open-chest.webp');
+  }
+  .error-message {
+    text-align: center;
+    color: red;
+    margin-top: 20px;
+  }
+</style>
+
+<div class="welcome-text">
+  <h1>Ahoy!</h1>
+  <h2>Follow the instructions on your map to unlock yer treasure.</h2>
+</div>
+
+
 <form method="post" action="/login">
   <p>Email: <input type="text" name="email" /></p>
   <p>Password: <input type="password" name="password" /></p>
-  <p><input type="submit" value="Login" /></p>
+  <button type="submit" title="Login" id="login-button">Login</button>
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 </form>
+{% if error %}
+<div class="error-message">
+  <p style="color: red">{{ error }}</p>
+</div>
+{% endif %}

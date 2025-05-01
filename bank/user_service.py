@@ -25,6 +25,19 @@ def get_user_with_credentials(email, password):
         con.close()
 
 
+def get_user_accounts(user) -> list:
+    try:
+        con = sqlite3.connect('bank.db')
+        cur = con.cursor()
+        cur.execute('''
+            SELECT id FROM accounts where owner=?''',
+                    (user,))
+        rows = cur.fetchall()
+        return [row[0] for row in rows]
+    finally:
+        con.close()
+
+
 def logged_in():
     token = request.cookies.get('auth_token')
     try:

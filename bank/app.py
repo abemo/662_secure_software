@@ -1,7 +1,7 @@
 from flask import (Flask, request, make_response,
                    redirect, render_template, g, abort)
 from flask_wtf.csrf import CSRFProtect
-from user_service import get_user_with_credentials, logged_in
+from user_service import get_user_with_credentials, logged_in, get_user_accounts
 from account_service import get_balance, do_transfer
 
 app = Flask(__name__)
@@ -33,7 +33,8 @@ def login():
 def dashboard():
     if not logged_in():
         return render_template("login.html")
-    return render_template("dashboard.html", email=g.user)
+    accounts = get_user_accounts(g.user)
+    return render_template("dashboard.html", email=g.user, accounts=accounts)
 
 
 @app.route("/details", methods=['GET'])
@@ -44,7 +45,7 @@ def details():
     return render_template(
         "details.html",
         user=g.user,
-        account_number=account_number,
+        accounts=account_number,
         balance=get_balance(account_number, g.user))
 
 
