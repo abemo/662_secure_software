@@ -31,18 +31,22 @@ This application incorporates several security measures to protect against commo
 - **Generic Error Messages:** Uses non-specific error messages for failed operations (login, access denied, transfer failed) to avoid revealing internal system state or valid user/account information.
 - **Secure Logout:** Logout functionality requires a POST request (protected by CSRF) to prevent attackers from logging users out maliciously.
 
-## Running the Application (Placeholder)
+## Running the Application
 
-_(Instructions on how to set up and run the project would go here)_
+### Required Packages
+
+See the `requirements.txt` file for a list of required packages.
 
 ```bash
-# Example setup commands
-# python -m venv venv
-# source venv/bin/activate # or venv\Scripts\activate on Windows
-# pip install -r requirements.txt # Assuming a requirements file exists
-# flask run
+$ pip3 install -r requirements.txt
 ```
 
-## Disclaimer
+### Starting the Server
 
-This is a demonstrative application. While it implements several security best practices, ensure thorough security reviews and testing before deploying any application handling sensitive financial data in a real-world scenario. The `SECRET_KEY` in `app.py` should be replaced with a strong, unique, and securely managed secret.
+Run the following command to start the server:
+
+```bash
+$ python3 -m flask run
+```
+
+Go to http://127.0.0.1:5000 while the server is running to see the website.
