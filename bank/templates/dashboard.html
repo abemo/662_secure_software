@@ -9,7 +9,7 @@
     justify-content: center;
   }
   h1 {
-    font-family: 'Comic Sans MS', cursive;
+    font-family: "Comic Sans MS", cursive;
     font-size: 3.5em;
     margin-bottom: 20px;
   }
@@ -20,7 +20,8 @@
     min-height: 120px;
     align-items: center;
     background-color: blue;
-    background: url('/static/horizontal-scroll-background.png') no-repeat center center;
+    background: url("/static/horizontal-scroll-background.png") no-repeat center
+      center;
     background-size: contain;
 
     display: flex;
@@ -36,17 +37,27 @@
   #logout {
     margin-top: 20px;
     font-size: 1.5em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    color: blue;
   }
 </style>
 
 <h1>What would you like to do today?</h1>
 {% for account in accounts %}
 <div class="scroll">
-  <p><a href="/details?account={{ account }}">account {{ account }} details</a></p>
+  <p>
+    <a href="/details?account={{ account }}">account {{ account }} details</a>
+  </p>
 </div>
 {% endfor %}
 <div class="scroll">
   <p><a href="/transfer">Transfer</a></p>
 </div>
 
-<p id="logout"><a href="/logout">Logout</a></p>
+<form method="POST" action="/logout" id="logout-form">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+  <button type="submit" id="logout">Logout</button>
+</form>

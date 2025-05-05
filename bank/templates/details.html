@@ -7,8 +7,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh; 
-    margin: 0; 
+    height: 100vh;
+    margin: 0;
   }
 
   .content {
@@ -16,7 +16,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center; 
+    text-align: center;
   }
 
   .balance-container {
@@ -30,7 +30,7 @@
   .balance-number {
     font-size: 2.5em;
     font-weight: bold;
-    color: #b8860b; 
+    color: #b8860b;
     animation: pulse 1.5s ease-in-out infinite;
   }
 
@@ -41,51 +41,49 @@
   }
 
   @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0);     }
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   @keyframes pulse {
-    0%, 100% { transform: scale(1);   }
-    50%      { transform: scale(1.1); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
   }
   @keyframes spin {
-    from { transform: rotate(0deg);   }
-    to   { transform: rotate(360deg); }
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 </style>
 
 <div class="content">
   <h2>Avast there, {{ user }}!</h2>
   <h1>Treasure Chest {{ accounts }}</h1>
-  
+
   {% if balance is none %}
-    <span style="color: red">Account not found</span>
+  <span style="color: red">Account not found</span>
   {% else %}
-    <div class="balance-container">
-      <span class="balance-number">{{ balance }}</span>
-      <img src="/static/doubloon.png" alt="coin" class="coin">
-    </div>
+  <div class="balance-container">
+    <span class="balance-number">{{ balance }}</span>
+    <img src="/static/doubloon.png" alt="coin" class="coin" />
+  </div>
   {% endif %}
-  
+
   <p><a href="/dashboard">Back to Dashboard</a></p>
 </div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const el = document.querySelector('.balance-number');
-    if (!el) return;
-    const target = parseFloat(el.textContent);
-    el.textContent = '0';
-    const duration = 1000; 
-    let start;
-    function step(timestamp) {
-      if (!start) start = timestamp;
-      const progress = Math.min((timestamp - start) / duration, 1);
-      el.textContent = Math.floor(progress * target).toLocaleString();
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      }
-    }
-    requestAnimationFrame(step);
-  });
-</script>
+<!-- Removed inline script for CSP compliance, now using external script -->
+<script src="/static/balance-animation.js"></script>
