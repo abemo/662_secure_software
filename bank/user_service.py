@@ -85,7 +85,7 @@ def logged_in():
         data = jwt.decode(token, SECRET, algorithms=["HS256"])
         g.user = data["sub"]
         return True
-    except jwt.InvalidTokenError:
+    except jwt.exceptions.InvalidTokenError:
         return False
 
 
