@@ -7,6 +7,9 @@ from user_service import get_user_accounts, get_user_with_credentials, logged_in
 app = Flask(__name__)
 
 # SECURITY: Set a strong secret key for session management and CSRF protection
+# in a real website or server, this would be stored in an environment variable
+# or a secure vault, not hardcoded in the source code
+# it is included here, so you can run the code without any additional setup
 app.config["SECRET_KEY"] = "4D29E2408B0C30D5199D0D4F12769C3E"
 # CSRF Protection: Initialize CSRFProtect with our Flask app
 # This automatically protects all POST, PUT, PATCH, and DELETE requests

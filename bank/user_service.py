@@ -7,6 +7,9 @@ import jwt
 from flask import g, request
 from passlib.hash import pbkdf2_sha256
 
+# in a real website or server, this would be stored in an environment variable
+# or a secure vault, not hardcoded in the source code
+# it is included here, so you can run the code without any additional setup
 SECRET = "bfg28y7efg238re7r6t32gfo23vfy7237yibdyo238do2v3"
 
 
@@ -34,7 +37,8 @@ def get_user_with_credentials(email, password):
         if row is not None:
             email, name, hash = row
             if pbkdf2_sha256.verify(password, hash):
-                result = {"email": email, "name": name, "token": create_token(email)}
+                result = {"email": email, "name": name,
+                          "token": create_token(email)}
         else:
             # If user doesn't exist, still perform a hash verification to maintain constant time
             # This dummy verification uses a constant hash that will never match
@@ -91,6 +95,7 @@ def logged_in():
 
 def create_token(email):
     now = datetime.datetime.now(datetime.timezone.utc)
-    payload = {"sub": email, "iat": now, "exp": now + datetime.timedelta(minutes=60)}
+    payload = {"sub": email, "iat": now,
+               "exp": now + datetime.timedelta(minutes=60)}
     token = jwt.encode(payload, SECRET, algorithm="HS256")
     return token
